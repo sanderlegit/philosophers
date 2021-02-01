@@ -6,12 +6,11 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:46:29 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/01 17:51:00 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/01 18:11:18 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
-#include <pthread.h>
 
 /*
 ** eating -> sleeping -> thinking
@@ -25,7 +24,8 @@ void		*a_philo(void *vstruct)
 	d = vstruct;
 	i_am = d->i_am;
 	d->i_am++;
-	printf("Hi I am philo no.%d\n", i_am);
+	printf("%dms\t%d was born\n", elapsed(d), i_am);
+	
 	return (0);
 }
 
@@ -42,13 +42,12 @@ int			run_threads(t_data *d)
 	int			i;
 
 	d->i_am = 1;
-	/*threads = ft_calloc(d->no_of_philo, sizeof(pthread_t));*/
-	/*if (!threads)*/
-		/*return print_return("Thread allocation failed", 1);*/
 	d->fork_status = ft_calloc(d->no_of_philo, sizeof(char));
 	if (!d->fork_status)
 		return (print_return("run_threads: failed to allocate fork_status ", 1));
 	i = 0;
+	if (init_time(d))
+		return (1);
 	while (i < d->no_of_philo)
 	{
 		if (pthread_create(&threads[i], NULL, a_philo, d))

@@ -6,12 +6,12 @@
 #    By: averheij <averheij@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2021/02/01 15:31:38 by averheij      #+#    #+#                  #
-#    Updated: 2021/02/01 17:36:24 by averheij      ########   odam.nl          #
+#    Updated: 2021/02/01 18:05:53 by averheij      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	philo_one
-CFILES	=	main.c parse_args.c util_1.c
+CFILES	=	main.c parse_args.c time.c util_1.c
 OFILES	=	$(CFILES:.c=.o)
 FLAGS	=	-Werror -Wall -Wextra
 LIB		=	-lpthread

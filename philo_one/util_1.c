@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:51:23 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/01 17:43:28 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/01 17:51:32 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int			ft_atoi(const char *str)
 	return (sign * (int)res);
 }
 
-void	ft_bzero(void *s, size_t n)
+void		ft_bzero(void *s, size_t n)
 {
 	unsigned char	*us;
 	size_t			i;
@@ -54,7 +54,7 @@ void	ft_bzero(void *s, size_t n)
 	}
 }
 
-void	*ft_calloc(size_t count, size_t size)
+void		*ft_calloc(size_t count, size_t size)
 {
 	void		*block;
 
@@ -65,8 +65,8 @@ void	*ft_calloc(size_t count, size_t size)
 	return (block);
 }
 
-int		print_return(char *str, int ret)
+int			print_return(char *str, int ret)
 {
 	printf("philo_one: %s\n", str);
-	return ret;
+	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:51:41 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/01 17:34:28 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/01 17:51:49 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <stdio.h>
 
 typedef struct		s_data {
-	int		 		no_of_philo;
+	int				no_of_philo;
 	int				time_die;
 	int				time_eat;
 	int				time_sleep;
@@ -34,6 +34,6 @@ void				ft_bzero(void *s, size_t n);
 
 void				parse_arg(int *res, char *arg, int *fail);
 int					parse_args(t_data *d, int argc, char **argv);
-void				*a_philo(void *strct);
+void				*a_philo(void *vstruct);
 
 #endif

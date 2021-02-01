@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:46:29 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/01 19:57:53 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/01 20:09:17 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ int			init_mutex(t_data *d)
 {
 	if (pthread_mutex_init(&d->lstatus, NULL) != 0)
 		return (print_return("init_mutex: mutex initialization failed", 1));
-	/*if (pthread_mutex_init(&d->lforks, NULL) != 0)*/
-		/*return (print_return("init_mutex: mutex initialization failed", 1));*/
+	if (pthread_mutex_init(&d->lforks, NULL) != 0)
+		return (print_return("init_mutex: mutex initialization failed", 1));
 	return (0);
 }
 

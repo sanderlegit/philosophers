@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:51:41 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/01 20:01:51 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/01 20:09:22 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
 # define PEATD	1
 
 typedef struct		s_data {
-	//pthread_mutex_t lforks;
 	int				no_of_philo;
 	int				time_die;
 	int				time_eat;
@@ -36,6 +35,7 @@ typedef struct		s_data {
 	int				must_eat;
 	char			*fork_status;
 	pthread_mutex_t lstatus;
+	pthread_mutex_t lforks;
 	int				i_am;
 	long			start_time;
 	int				has_died;

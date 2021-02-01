@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 18:16:00 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/01 20:01:45 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/01 20:10:41 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void		grab_fork(t_data *d, t_philo *p)
 {
 	int		ready;
 
+	pthread_mutex_lock(&d->lforks);
 	ready = 0;
 	if (d->fork_status[p->i_am - 1] == 0) {
 		if (p->i_am - 2 < 0)
@@ -59,6 +60,7 @@ void		grab_fork(t_data *d, t_philo *p)
 			d->fork_status[p->i_am - 2] = p->i_am;
 		p->has_fork = 1;
 	}
+	pthread_mutex_unlock(&d->lforks);
 }
 
 void		*a_philo(void *vstruct)
@@ -87,8 +89,11 @@ void		*a_philo(void *vstruct)
 		print_status("has taken a fork", elapsed(d) / 1000, p.i_am, d);
 		print_status("is eating", elapsed(d) / 1000, p.i_am, d);
 		p.eat_count++;
-		if (PEATD)
+		if (PEATD) {
+			pthread_mutex_lock(&d->lstatus);
 			printf("\t\t%d has eaten %d times, last %ld\n", p.i_am, p.eat_count, (elapsed(d) - p.ate_at) / 1000);
+			pthread_mutex_unlock(&d->lstatus);
+		}
 		p.ate_at = elapsed(d);
 		usleep(d->time_eat);
 		drop_fork(d, &p);
@@ -99,8 +104,11 @@ void		*a_philo(void *vstruct)
 	}
 	if (!d->has_died)
 		print_status("died", elapsed(d) / 1000, p.i_am, d);
-	if (PEATD)
+	if (PEATD) {
+		pthread_mutex_lock(&d->lstatus);
 		printf("\t\t%d has eaten %d times, last %ld\n", p.i_am, p.eat_count, (elapsed(d) - p.ate_at) / 1000);
+		pthread_mutex_unlock(&d->lstatus);
+	}
 	d->has_died = 1;
 	return (0);
 }

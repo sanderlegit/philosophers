@@ -6,12 +6,12 @@
 #    By: averheij <averheij@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2021/02/01 15:31:38 by averheij      #+#    #+#                  #
-#    Updated: 2021/02/01 18:05:53 by averheij      ########   odam.nl          #
+#    Updated: 2021/02/01 19:01:50 by averheij      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	philo_one
-CFILES	=	main.c parse_args.c time.c util_1.c
+CFILES	=	main.c a_philo.c parse_args.c time.c util_1.c
 OFILES	=	$(CFILES:.c=.o)
 FLAGS	=	-Werror -Wall -Wextra
 LIB		=	-lpthread
@@ -25,21 +25,28 @@ else
 	EXTRA_FLAGS	=	
 endif
 
-#FLAGS	+=	-g -fsanitize=address
+FLAGS	+=	-g
+FLAGS	+=	-fsanitize=address
+CFILES	+=	print_util.c
+OFILES	=	$(CFILES:.c=.o)
 
 #BOLD	=	\033[1m
 #CLEAR	=	\033[0m
 
+objects/%.o: %.c
+	$(CC) $(FLAGS) -c $< -o $@ $(DEFINE)
+
+%.o: %.c
+	$(CC) $(FLAGS) -c $< -o $@ $(DEFINE)
+
 all: $(NAME)
+	echo $(OFILES)
 
 $(NAME): $(OBJDIR) $(OFILES)
 	$(CC) $(FLAGS) -o $(NAME) $(OFILES) $(LIB) $(EXTRA_FLAGS)
 
 $(OBJDIR):
 	mkdir -p $@
-
-objects/%.o: %.c
-	$(CC) $(FLAGS) -c $< -o $@ $(DEFINE)
 
 bonus: all
 

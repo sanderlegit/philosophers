@@ -6,33 +6,18 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:46:29 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/01 18:11:18 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/01 19:57:53 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
 
-/*
-** eating -> sleeping -> thinking
-*/
-
-void		*a_philo(void *vstruct)
-{
-	t_data	*d;
-	int		i_am;
-
-	d = vstruct;
-	i_am = d->i_am;
-	d->i_am++;
-	printf("%dms\t%d was born\n", elapsed(d), i_am);
-	
-	return (0);
-}
-
 int			init_mutex(t_data *d)
 {
-	if (pthread_mutex_init(&d->l1, NULL) != 0)
+	if (pthread_mutex_init(&d->lstatus, NULL) != 0)
 		return (print_return("init_mutex: mutex initialization failed", 1));
+	/*if (pthread_mutex_init(&d->lforks, NULL) != 0)*/
+		/*return (print_return("init_mutex: mutex initialization failed", 1));*/
 	return (0);
 }
 
@@ -60,6 +45,7 @@ int			run_threads(t_data *d)
 		pthread_join(threads[i], NULL);
 		i++;
 	}
+	free(d->fork_status);
 	return (0);
 }
 
@@ -79,6 +65,7 @@ int			main(int argc, char **argv)
 {
 	t_data	data;
 
+	ft_bzero(&data, sizeof(t_data));
 	if (parse_args(&data, argc, argv))
 		return (1);
 	if (init_mutex(&data))

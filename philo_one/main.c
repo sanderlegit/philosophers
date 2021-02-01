@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:46:29 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/01 17:36:49 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/01 17:43:04 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void		*a_philo(void *strct)
 int			init_mutex(t_data *d)
 {
     if (pthread_mutex_init(&d->l1, NULL) != 0)
-        return print_return("Mutex initialization failed.", 1);
+        return print_return("init_mutex: mutex initialization failed", 1);
 	return 0;
 }
 
@@ -45,11 +45,15 @@ int			run_threads(t_data *d)
 	/*if (!threads)*/
 		/*return print_return("Thread allocation failed", 1);*/
 
+	d->fork_status = ft_calloc(d->no_of_philo, sizeof(char));
+	if (!d->fork_status)
+		return print_return("run_threads: failed to allocate fork_status ", 1);
+
 	i = 0;
 	while (i < d->no_of_philo)
 	{
 		if (pthread_create(&threads[i], NULL, a_philo, d))
-			return print_return("Failed to create thread", 1);
+			return print_return("run_thread: failed to create thread", 1);
 		i++;
 	}
 	i = 0;

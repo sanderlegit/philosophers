@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:51:23 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/01 17:17:51 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/01 17:43:28 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,6 @@ void	*ft_calloc(size_t count, size_t size)
 
 int		print_return(char *str, int ret)
 {
-	printf("%s\n", str);
+	printf("philo_one: %s\n", str);
 	return ret;
 }

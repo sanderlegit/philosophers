@@ -1,3 +1,17 @@
 make sure theyre printing their deaths within 10ms
-edge case, if the sleep time and eat time is longer than death time, should it still rpint within the 10ms?
+	by haivng a thread that just checks if theyve died or not
+		data should have all philos stored
 
+pthread_detatch after creating a thread
+
+check the bounds of the arguments properly
+	if (data->phil_count < 2 || data->phil_count > 200)
+		return (true);
+	if (data->time.die < 60 || data->time.eat < 60 || data->time.sleep < 60)
+		return (true);
+	if (data->min_eat && data->min_eat <= 0)
+		return (true);
+
+create a mutex lock for each fork instead of a char status array, or do both :)
+	lock/unlock instead of setting 1 and 0 in the array
+	individual message per fork

@@ -6,14 +6,25 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:46:29 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/01 20:09:17 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/02 10:58:44 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
+#include <pthread.h>
 
-int			init_mutex(t_data *d)
+int			init_data(t_data *d)
 {
+	d->i_am = 1;
+	d->fork_status = ft_calloc(d->no_of_philo, sizeof(char));
+	if (!d->fork_status)
+		return (print_return("run_threads: failed to allocate fork_status", 1));
+	d->ph = ft_calloc(d->no_of_philo, sizeof(t_philo *));
+	if (!d->ph) {
+		free(d->fork_status);
+		return (print_return("run_threads: failed to allocate philo pointers", 1));
+	}
+
 	if (pthread_mutex_init(&d->lstatus, NULL) != 0)
 		return (print_return("init_mutex: mutex initialization failed", 1));
 	if (pthread_mutex_init(&d->lforks, NULL) != 0)
@@ -26,10 +37,6 @@ int			run_threads(t_data *d)
 	pthread_t	threads[d->no_of_philo];
 	int			i;
 
-	d->i_am = 1;
-	d->fork_status = ft_calloc(d->no_of_philo, sizeof(char));
-	if (!d->fork_status)
-		return (print_return("run_threads: failed to allocate fork_status ", 1));
 	i = 0;
 	if (init_time(d))
 		return (1);
@@ -37,15 +44,16 @@ int			run_threads(t_data *d)
 	{
 		if (pthread_create(&threads[i], NULL, a_philo, d))
 			return (print_return("run_thread: failed to create thread", 1));
+		pthread_detach(threads[i]);
 		i++;
 	}
-	i = 0;
-	while (i < d->no_of_philo)
-	{
-		pthread_join(threads[i], NULL);
-		i++;
-	}
-	free(d->fork_status);
+	//Continiously check if a philosopher has died, by checking p->ate_at 
+	/*i = 0;*/
+	/*while (i < d->no_of_philo)*/
+	/*{*/
+		/*pthread_join(threads[i], NULL);*/
+		/*i++;*/
+	/*}*/
 	return (0);
 }
 
@@ -68,9 +76,11 @@ int			main(int argc, char **argv)
 	ft_bzero(&data, sizeof(t_data));
 	if (parse_args(&data, argc, argv))
 		return (1);
-	if (init_mutex(&data))
+	if (init_data(&data))
 		return (1);
 	if (run_threads(&data))
 		return (1);
+	free(data.fork_status);
+	free(data.ph);
 	return (0);
 }

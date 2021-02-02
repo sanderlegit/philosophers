@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 18:16:00 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/01 20:10:41 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/02 10:59:50 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void		*a_philo(void *vstruct)
 	ft_bzero(&p, sizeof(t_philo));
 	d = vstruct;
 	p.i_am = d->i_am;
+	d->ph[p.i_am - 1] = &p;
 	d->i_am++;
 	p.ate_at = elapsed(d);
 	print_status("was born", elapsed(d) / 1000, p.i_am, d);

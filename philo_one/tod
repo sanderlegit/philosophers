@@ -8,4 +8,4 @@ check the bounds of the arguments properly
 
 randomly when run a philo dies early
 
-randomly when run a null access causes seg during exit
+randomly when run a null access causes seg during exijj <-- think this is solve now, with proper thread join/mutex stop

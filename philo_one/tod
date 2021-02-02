@@ -1,6 +1,6 @@
 make sure theyre printing their deaths within 10ms
 	by haivng a thread that just checks if theyve died or not
-		data should have all philos stored
+		data should have all philos stored		<-- done
 
 pthread_detatch after creating a thread
 

@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:46:29 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/02 10:58:44 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/02 11:45:54 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,32 @@
 
 int			init_data(t_data *d)
 {
-	d->i_am = 1;
-	d->fork_status = ft_calloc(d->no_of_philo, sizeof(char));
-	if (!d->fork_status)
-		return (print_return("run_threads: failed to allocate fork_status", 1));
-	d->ph = ft_calloc(d->no_of_philo, sizeof(t_philo *));
+	int		i;
+
+	d->fork_status = ft_calloc(d->no_of_philo, sizeof(char));//Debug
+	if (!d->fork_status)//Debug
+		return (print_return("run_threads: failed to allocate fork_status", 1));//Debug
+
+	d->alive = 0;
+	d->fork_lock = ft_calloc(d->no_of_philo, sizeof(pthread_mutex_t));
+	if (!d->fork_lock)
+		return (print_return("run_threads: failed to allocate fork_lock", 1));
+	d->ph = ft_calloc(d->no_of_philo, sizeof(t_philo));
 	if (!d->ph) {
-		free(d->fork_status);
+		free(d->fork_lock);
 		return (print_return("run_threads: failed to allocate philo pointers", 1));
 	}
-
 	if (pthread_mutex_init(&d->lstatus, NULL) != 0)
-		return (print_return("init_mutex: mutex initialization failed", 1));
+		return (print_return("init_data: mutex initialization failed", 1));
 	if (pthread_mutex_init(&d->lforks, NULL) != 0)
-		return (print_return("init_mutex: mutex initialization failed", 1));
+		return (print_return("init_data: mutex initialization failed", 1));
+	i = 0;
+	while (i < d->no_of_philo)
+	{
+		if (pthread_mutex_init(&d->fork_lock[i], NULL) != 0)
+			return (print_return("init_data: mutex initialization failed", 1));
+		i++;
+	}
 	return (0);
 }
 
@@ -48,12 +60,31 @@ int			run_threads(t_data *d)
 		i++;
 	}
 	//Continiously check if a philosopher has died, by checking p->ate_at 
-	/*i = 0;*/
-	/*while (i < d->no_of_philo)*/
-	/*{*/
-		/*pthread_join(threads[i], NULL);*/
-		/*i++;*/
-	/*}*/
+	while (d->alive != 0) {
+		i = 0;
+		while (i < d->no_of_philo)
+		{
+			/*if (PEATD) {//Debug*/
+				/*pthread_mutex_lock(&d->lstatus);//Debug*/
+				/*printf("\t\t%d has eaten %d times, last %ld\n", i + 1, d->ph[i].eat_count, (elapsed(d) - d->ph[i].ate_at) / 1000);//Debug*/
+				/*pthread_mutex_unlock(&d->lstatus);//Debug*/
+			/*}//Debug*/
+			if (d->ph[i].has_died != 1 && (elapsed(d) - d->ph[i].ate_at) > d->time_die) {
+				print_status("died", elapsed(d) / 1000, i + 1, d);
+				d->ph[i].has_died = 1;
+				printf("still alive: %d\n", d->alive);
+			}
+			/*pthread_join(threads[i], NULL);*/
+			i++;
+		}
+	}
+	i = 0;
+	while (i < d->no_of_philo)
+	{
+		if (pthread_mutex_destroy(&d->fork_lock[i]) != 0)
+			print_return("run_threads: mutex destroy failed", 1);
+		i++;
+	}
 	return (0);
 }
 

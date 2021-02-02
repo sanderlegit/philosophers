@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:51:41 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/02 10:59:41 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/02 11:36:38 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct		s_philo {
 	long			ate_at;
 	char			has_fork;
 	int				eat_count;
+	int				has_died;
 }					t_philo;
 
 typedef struct		s_data {
@@ -41,12 +42,13 @@ typedef struct		s_data {
 	int				time_sleep;
 	int				must_eat;
 	char			*fork_status;
+	pthread_mutex_t	*fork_lock;
 	pthread_mutex_t lstatus;
 	pthread_mutex_t lforks;
-	int				i_am;
+	int				alive;
 	long			start_time;
 	int				has_died;
-	t_philo			**ph;
+	t_philo			*ph;
 }					t_data;
 
 void		print_forks(t_data *d, t_philo *p);

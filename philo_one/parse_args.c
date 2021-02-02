@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 17:16:45 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/01 18:56:38 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/02 13:11:19 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int			parse_args(t_data *d, int argc, char **argv)
 	if (argc >= 5 && argc <= 6)
 	{
 		fail = 0;
-		parse_arg(&d->no_of_philo, argv[1], &fail);
+		parse_arg(&d->no_philo, argv[1], &fail);
 		parse_arg(&d->time_die, argv[2], &fail);
 		d->time_die *= 1000;
 		parse_arg(&d->time_eat, argv[3], &fail);
@@ -47,6 +47,6 @@ int			parse_args(t_data *d, int argc, char **argv)
 	}
 	if ((argc != 5 && argc != 6) || fail)
 		return (print_return("parse_args: invalid arguments", 1));
-	printf("no_of_philo: %d\n time_die: %d\n time_eat: %d\n time_sleep: %d\n must_eat: %d\n", d->no_of_philo, d->time_die, d->time_eat, d->time_sleep, d->must_eat);
+	arg_debug(d);//Debug
 	return (0);
 }

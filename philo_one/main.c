@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:46:29 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/02 11:45:54 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/02 13:45:46 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,27 +17,24 @@ int			init_data(t_data *d)
 {
 	int		i;
 
-	d->fork_status = ft_calloc(d->no_of_philo, sizeof(char));//Debug
-	if (!d->fork_status)//Debug
-		return (print_return("run_threads: failed to allocate fork_status", 1));//Debug
-
+	create_fork_debug(d);//Debug
 	d->alive = 0;
-	d->fork_lock = ft_calloc(d->no_of_philo, sizeof(pthread_mutex_t));
-	if (!d->fork_lock)
-		return (print_return("run_threads: failed to allocate fork_lock", 1));
-	d->ph = ft_calloc(d->no_of_philo, sizeof(t_philo));
+	d->fork = ft_calloc(d->no_philo, sizeof(pthread_mutex_t));
+	if (!d->fork)
+		return (print_return("run_threads: failed to allocate fork", 1));
+	d->ph = ft_calloc(d->no_philo, sizeof(t_philo));
 	if (!d->ph) {
-		free(d->fork_lock);
+		free(d->fork);
 		return (print_return("run_threads: failed to allocate philo pointers", 1));
 	}
 	if (pthread_mutex_init(&d->lstatus, NULL) != 0)
 		return (print_return("init_data: mutex initialization failed", 1));
-	if (pthread_mutex_init(&d->lforks, NULL) != 0)
-		return (print_return("init_data: mutex initialization failed", 1));
 	i = 0;
-	while (i < d->no_of_philo)
+	while (i < d->no_philo)
 	{
-		if (pthread_mutex_init(&d->fork_lock[i], NULL) != 0)
+		if (pthread_mutex_init(&d->fork[i], NULL) != 0)
+			return (print_return("init_data: mutex initialization failed", 1));
+		if (pthread_mutex_init(&d->ph[i].leat, NULL) != 0)
 			return (print_return("init_data: mutex initialization failed", 1));
 		i++;
 	}
@@ -46,43 +43,53 @@ int			init_data(t_data *d)
 
 int			run_threads(t_data *d)
 {
-	pthread_t	threads[d->no_of_philo];
+	pthread_t	threads[d->no_philo];
 	int			i;
 
 	i = 0;
 	if (init_time(d))
 		return (1);
-	while (i < d->no_of_philo)
+	while (i < d->no_philo)
 	{
 		if (pthread_create(&threads[i], NULL, a_philo, d))
 			return (print_return("run_thread: failed to create thread", 1));
-		pthread_detach(threads[i]);
+		/*pthread_detach(threads[i]);*/
 		i++;
 	}
-	//Continiously check if a philosopher has died, by checking p->ate_at 
-	while (d->alive != 0) {
+	while (!d->has_died) {
 		i = 0;
-		while (i < d->no_of_philo)
+		while (!d->has_died && i < d->no_philo)
 		{
-			/*if (PEATD) {//Debug*/
-				/*pthread_mutex_lock(&d->lstatus);//Debug*/
-				/*printf("\t\t%d has eaten %d times, last %ld\n", i + 1, d->ph[i].eat_count, (elapsed(d) - d->ph[i].ate_at) / 1000);//Debug*/
-				/*pthread_mutex_unlock(&d->lstatus);//Debug*/
-			/*}//Debug*/
-			if (d->ph[i].has_died != 1 && (elapsed(d) - d->ph[i].ate_at) > d->time_die) {
-				print_status("died", elapsed(d) / 1000, i + 1, d);
-				d->ph[i].has_died = 1;
-				printf("still alive: %d\n", d->alive);
+			pthread_mutex_lock(&d->ph[i].leat);
+			if (d->must_eat != -1 && d->ph[i].eat_count >= d->must_eat)
+			{
+				d->has_died = 1;
+				pthread_mutex_lock(&d->lstatus);
 			}
-			/*pthread_join(threads[i], NULL);*/
+			if ((elapsed(d) - d->ph[i].ate_at) > d->time_die) {
+				print_status("died", elapsed(d) / 1000, i + 1, d);
+				pthread_mutex_lock(&d->lstatus);
+				d->has_died = 1;
+			}
+			pthread_mutex_unlock(&d->ph[i].leat);
 			i++;
 		}
 	}
+	free(d->fork);
+
+	usleep(10000);
+	pthread_mutex_unlock(&d->lstatus);
 	i = 0;
-	while (i < d->no_of_philo)
+	while (i < d->no_philo)
 	{
-		if (pthread_mutex_destroy(&d->fork_lock[i]) != 0)
-			print_return("run_threads: mutex destroy failed", 1);
+		pthread_mutex_unlock(&d->fork[i]);
+		pthread_mutex_unlock(&d->ph[i].leat);
+		i++;
+	}
+	i = 0;
+	while (i < d->no_philo)
+	{
+		pthread_join(threads[i], NULL);
 		i++;
 	}
 	return (0);
@@ -111,7 +118,7 @@ int			main(int argc, char **argv)
 		return (1);
 	if (run_threads(&data))
 		return (1);
-	free(data.fork_status);
+	free(data.fork_status);//Debug
 	free(data.ph);
 	return (0);
 }

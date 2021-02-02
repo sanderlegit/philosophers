@@ -1,9 +1,3 @@
-make sure theyre printing their deaths within 10ms
-	by haivng a thread that just checks if theyve died or not
-		data should have all philos stored		<-- done
-
-pthread_detatch after creating a thread
-
 check the bounds of the arguments properly
 	if (data->phil_count < 2 || data->phil_count > 200)
 		return (true);
@@ -12,6 +6,6 @@ check the bounds of the arguments properly
 	if (data->min_eat && data->min_eat <= 0)
 		return (true);
 
-create a mutex lock for each fork instead of a char status array, or do both :)
-	lock/unlock instead of setting 1 and 0 in the array
-	individual message per fork
+randomly when run a philo dies early
+
+randomly when run a null access causes seg during exit

@@ -6,24 +6,17 @@
 #    By: averheij <averheij@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2021/02/01 15:31:38 by averheij      #+#    #+#                  #
-#    Updated: 2021/02/05 12:02:42 by averheij      ########   odam.nl          #
+#    Updated: 2021/02/05 13:25:33 by averheij      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	philo_one
 CFILES	=	main.c a_philo.c parse_args.c time.c util_1.c
-OFILES	=	$(CFILES:%.c=objects/%.o)
-#FLAGS	=	-Werror -Wall -Wextra
+OBJDIR	=	objects
+OFILES	=	$(CFILES:%.c=$(OBJDIR)/%.o)
+FLAGS	=	-Werror -Wall -Wextra -O3
 LIB		=	-lpthread
 CC		=	gcc
-OBJDIR	=	./objects
-OS		=	$(shell uname)
-
-ifeq ($(OS),Linux)
-	EXTRA_FLAGS	=	
-else
-	EXTRA_FLAGS	=	
-endif
 
 FLAGS	+=	-g
 FLAGS	+=	-fsanitize=address

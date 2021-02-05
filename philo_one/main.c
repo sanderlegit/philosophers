@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:46:29 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/02 13:45:46 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/05 13:24:53 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int			init_data(t_data *d)
 	return (0);
 }
 
-int			run_threads(t_data *d)
+int			start_threads(t_data *d)
 {
 	pthread_t	threads[d->no_philo];
 	int			i;
@@ -56,34 +56,54 @@ int			run_threads(t_data *d)
 		/*pthread_detach(threads[i]);*/
 		i++;
 	}
+	manage_threads(d);
+	end_threads(d, threads);
+	return (0);
+}
+
+void		manage_threads(t_data *d)
+{
+	int		i;
+
 	while (!d->has_died) {
 		i = 0;
 		while (!d->has_died && i < d->no_philo)
 		{
 			pthread_mutex_lock(&d->ph[i].leat);
-			if (d->must_eat != -1 && d->ph[i].eat_count >= d->must_eat)
+			if (d->must_eat != -1 && !d->ph[i].full && d->ph[i].eat_count >= d->must_eat)
 			{
-				d->has_died = 1;
-				pthread_mutex_lock(&d->lstatus);
+				d->no_full++;
+				d->ph[i].full = 1;
+				if (d->no_full == d->no_philo)
+					d->has_died = 1;
+				if (d->no_full == d->no_philo)
+					pthread_mutex_lock(&d->lstatus);
 			}
 			if ((elapsed(d) - d->ph[i].ate_at) > d->time_die) {
 				print_status("died", elapsed(d) / 1000, i + 1, d);
-				pthread_mutex_lock(&d->lstatus);
 				d->has_died = 1;
+				pthread_mutex_lock(&d->lstatus);
 			}
 			pthread_mutex_unlock(&d->ph[i].leat);
 			i++;
 		}
 	}
-	free(d->fork);
+}
 
-	usleep(10000);
+void		end_threads(t_data *d, pthread_t threads[])
+{
+	int		i;
+
+	free(d->fork);
 	pthread_mutex_unlock(&d->lstatus);
+	pthread_mutex_destroy(&d->lstatus);
 	i = 0;
 	while (i < d->no_philo)
 	{
 		pthread_mutex_unlock(&d->fork[i]);
 		pthread_mutex_unlock(&d->ph[i].leat);
+		pthread_mutex_destroy(&d->fork[i]);
+		pthread_mutex_destroy(&d->ph[i].leat);
 		i++;
 	}
 	i = 0;
@@ -92,7 +112,6 @@ int			run_threads(t_data *d)
 		pthread_join(threads[i], NULL);
 		i++;
 	}
-	return (0);
 }
 
 /*
@@ -116,7 +135,7 @@ int			main(int argc, char **argv)
 		return (1);
 	if (init_data(&data))
 		return (1);
-	if (run_threads(&data))
+	if (start_threads(&data))
 		return (1);
 	free(data.fork_status);//Debug
 	free(data.ph);

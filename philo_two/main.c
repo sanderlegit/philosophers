@@ -6,11 +6,12 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:46:29 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/05 16:32:02 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/05 16:53:21 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
+#include <semaphore.h>
 
 int			init_data(t_data *d)
 {
@@ -39,6 +40,8 @@ int			init_data(t_data *d)
 	while (i < d->no_philo)
 	{
 		d->ph[i].semname = get_semname(i);
+		if (!d->ph[i].semname)
+			return (print_return("init_data: sem name initialization failed", 1));
 		sem_unlink(d->ph[i].semname);
 		d->ph[i].leat = sem_open(d->ph[i].semname, O_CREAT, 666, 1);
 		if (!d->ph[i].leat)
@@ -60,7 +63,7 @@ int			start_threads(t_data *d)
 		if (pthread_create(&threads[i], NULL, a_philo, d))
 			return (print_return("run_thread: failed to create thread", 1));
 		i++;
-		usleep(1000);
+		usleep(d->time_eat);
 	}
 	/*i = 0;*/
 	/*while (i < d->no_philo)*/
@@ -106,6 +109,7 @@ void		manage_threads(t_data *d)
 					sem_wait(d->lstatus);
 			}
 			if ((elapsed(d) - d->ph[i].ate_at) > d->time_die) {
+				printf("tod:%ld, %d\n", elapsed(d) - d->ph[i].ate_at, d->time_die);
 				print_status("died", elapsed(d) / 1000, i + 1, d);
 				d->has_died = 1;
 				/*pthread_mutex_lock(&d->lstatus);*/

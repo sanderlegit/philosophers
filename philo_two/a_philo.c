@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 18:16:00 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/05 16:28:23 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/05 16:58:52 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,12 @@ void		grab_fork(t_data *d, t_philo *p)
 {
 	/*safe_lock(p->fork[0], d->has_died);*/
 	safe_lock(d->fork, d->has_died);
+	print_forks(d, 1, p->i_am);//Debug
 	print_status("has taken a fork", elapsed(d) / 1000, p->i_am, d);
 	safe_lock(d->fork, d->has_died);
 	/*pthread_mutex_lock(&p->leat);*/
 	sem_wait(p->leat);
+	print_forks(d, 1, p->i_am);//Debug
 	p->eat_count++;
 	p->ate_at = elapsed(d);
 	print_status("is eating", elapsed(d) / 1000, p->i_am, d);
@@ -77,6 +79,7 @@ void		*a_philo(void *vstruct)
 		eat_debug(d, p);//Debug
 		usleep(d->time_eat);
 		drop_fork(d);
+		print_forks(d, -2, -1 * p->i_am);//Debug
 		print_status("is sleeping", elapsed(d) / 1000, p->i_am, d);
 		usleep(d->time_sleep);
 	}

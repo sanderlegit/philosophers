@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:51:41 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/05 16:28:00 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/05 16:48:28 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,9 @@ typedef struct			s_data {
 
 # define PEATD	0
 void		eat_debug(t_data *d, t_philo *p);
-# define PARGD	0
+# define PARGD	1
 void		arg_debug(t_data *d);
+void		print_forks(t_data *d, int n1, int n);
 
 void					parse_arg(int *res, char *arg, int *fail);
 int						parse_args(t_data *d, int argc, char **argv);

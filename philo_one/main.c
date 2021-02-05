@@ -6,12 +6,11 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:46:29 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/05 14:13:51 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/05 16:26:48 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
-#include <pthread.h>
 
 int			init_data(t_data *d)
 {
@@ -23,7 +22,8 @@ int			init_data(t_data *d)
 	if (!d->fork)
 		return (print_return("run_threads: failed to allocate fork", 1));
 	d->ph = ft_calloc(d->no_philo, sizeof(t_philo));
-	if (!d->ph) {
+	if (!d->ph)
+	{
 		free(d->fork);
 		return (print_return("run_threads: failed to allocate philo pointers", 1));
 	}
@@ -102,7 +102,6 @@ void		end_threads(t_data *d, pthread_t threads[])
 {
 	int		i;
 
-	free(d->fork);
 	pthread_mutex_unlock(&d->lstatus);
 	pthread_mutex_destroy(&d->lstatus);
 	i = 0;
@@ -148,6 +147,7 @@ int			main(int argc, char **argv)
 	if (start_threads(&data))
 		return (1);
 	free(data.fork_status);//Debug
+	free(data.fork);
 	free(data.ph);
 	return (0);
 }

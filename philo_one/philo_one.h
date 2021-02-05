@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:51:41 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/05 14:24:01 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/05 16:02:10 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ typedef struct			s_data {
 	char				*fork_status;
 	pthread_mutex_t		*fork;
 	pthread_mutex_t		lstatus;
-	pthread_mutex_t		leat;
 	int					alive;
 	long				start_time;
 	int					has_died;

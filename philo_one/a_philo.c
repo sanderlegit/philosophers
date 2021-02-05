@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 18:16:00 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/05 13:24:52 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/05 13:33:36 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void		*a_philo(void *vstruct)
 
 	d = vstruct;
 	p = &d->ph[d->alive];
-	d->alive++;
+	/*d->alive++;*/
 	p->i_am = d->alive;
 	p->ate_at = elapsed(d);
 	p->fork[0] = p->i_am - 2 < 0 ? &d->fork[d->no_philo - 1] : &d->fork[p->i_am - 2];

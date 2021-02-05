@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:46:29 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/05 13:24:53 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/05 13:34:46 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,25 @@ int			start_threads(t_data *d)
 	pthread_t	threads[d->no_philo];
 	int			i;
 
-	i = 0;
 	if (init_time(d))
 		return (1);
+	i = 0;
 	while (i < d->no_philo)
 	{
+		d->alive = i + 1;
+		printf("alive:%d\n", d->alive);
 		if (pthread_create(&threads[i], NULL, a_philo, d))
 			return (print_return("run_thread: failed to create thread", 1));
-		/*pthread_detach(threads[i]);*/
-		i++;
+		i += 2;
+	}
+	i = 1;
+	while (i < d->no_philo)
+	{
+		d->alive = i + 1;
+		printf("alive:%d\n", d->alive);
+		if (pthread_create(&threads[i], NULL, a_philo, d))
+			return (print_return("run_thread: failed to create thread", 1));
+		i += 2;
 	}
 	manage_threads(d);
 	end_threads(d, threads);

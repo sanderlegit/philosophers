@@ -1,2 +1,4 @@
 *.o
 philo_one/philo_one
+
+philo_two/philo_two

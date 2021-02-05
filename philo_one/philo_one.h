@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:51:41 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/05 13:25:18 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/05 14:24:01 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void		arg_debug(t_data *d);
 
 void					parse_arg(int *res, char *arg, int *fail);
 int						parse_args(t_data *d, int argc, char **argv);
+int						check_args(t_data *d);
 
 int						init_data(t_data *d);
 int						start_threads(t_data *d);

@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 18:16:00 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/05 14:07:19 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/05 14:10:21 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void		safe_lock(pthread_mutex_t *lock, int die)
 
 void		print_status(char *status, long time, int i_am, t_data *d)
 {
-	/*pthread_mutex_lock(&d->lstatus);*/
 	safe_lock(&d->lstatus, d->has_died);
 	printf("%ld\t%d %s\n", time, i_am, status);
 	pthread_mutex_unlock(&d->lstatus);
@@ -40,12 +39,9 @@ void		drop_fork(t_data *d, t_philo *p)
 
 void		grab_fork(t_data *d, t_philo *p)
 {
-	/*pthread_mutex_lock(p->fork[0]);*/
 	safe_lock(p->fork[0], d->has_died);
 	print_status("has taken a fork", elapsed(d) / 1000, p->i_am, d);
-	/*pthread_mutex_lock(p->fork[1]);*/
 	safe_lock(p->fork[1], d->has_died);
-	/*print_status("has taken a fork", elapsed(d) / 1000, p->i_am, d);*/
 	pthread_mutex_lock(&p->leat);
 	p->eat_count++;
 	p->ate_at = elapsed(d);

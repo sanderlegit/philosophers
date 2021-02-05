@@ -58,11 +58,17 @@ void		*a_philo(void *vstruct)
 {
 	t_data	*d;
 	t_philo	*p;
+	int		i;
 
 	d = vstruct;
-	p = &d->ph[d->alive];
-	d->alive++;
-	p->i_am = d->alive;
+	i = d->alive;
+	/*p = &d->ph[d->alive];*/
+	p = &d->ph[i];
+	/*printf("assigning:%d\n", i);*/
+	/*d->alive++;*/
+	i++;
+	p->i_am = i;
+	/*printf("i am:%d\n", p->i_am);*/
 	p->ate_at = elapsed(d);
 	p->fork[0] = p->i_am - 2 < 0 ? &d->fork[d->no_philo - 1] : &d->fork[p->i_am - 2];
 	p->fork[1] = &d->fork[p->i_am - 1];

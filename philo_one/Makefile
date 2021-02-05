@@ -6,13 +6,13 @@
 #    By: averheij <averheij@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2021/02/01 15:31:38 by averheij      #+#    #+#                  #
-#    Updated: 2021/02/02 13:42:19 by averheij      ########   odam.nl          #
+#    Updated: 2021/02/05 12:02:42 by averheij      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	philo_one
 CFILES	=	main.c a_philo.c parse_args.c time.c util_1.c
-OFILES	=	$(CFILES:.c=.o)
+OFILES	=	$(CFILES:%.c=objects/%.o)
 #FLAGS	=	-Werror -Wall -Wextra
 LIB		=	-lpthread
 CC		=	gcc
@@ -28,25 +28,22 @@ endif
 FLAGS	+=	-g
 FLAGS	+=	-fsanitize=address
 CFILES	+=	print_util.c
-OFILES	=	$(CFILES:.c=.o)
+OFILES	=	$(CFILES:%.c=objects/%.o)
 
 #BOLD	=	\033[1m
 #CLEAR	=	\033[0m
 
-objects/%.o: %.c
-	$(CC) $(FLAGS) -c $< -o $@ $(DEFINE)
-
-%.o: %.c
-	$(CC) $(FLAGS) -c $< -o $@ $(DEFINE)
-
 all: $(NAME)
 	echo $(OFILES)
 
-$(NAME): $(OBJDIR) $(OFILES)
-	$(CC) $(FLAGS) -o $(NAME) $(OFILES) $(LIB) $(EXTRA_FLAGS)
-
 $(OBJDIR):
 	mkdir -p $@
+
+objects/%.o: %.c
+	$(CC) $(FLAGS) -c $< -o $@ $(DEFINE)
+
+$(NAME): $(OBJDIR) $(OFILES)
+	$(CC) $(FLAGS) -o $(NAME) $(OFILES) $(LIB) $(EXTRA_FLAGS)
 
 bonus: all
 

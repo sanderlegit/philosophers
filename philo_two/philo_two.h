@@ -19,13 +19,13 @@
 # include <fcntl.h>
 # include <sys/time.h>
 # include <unistd.h>
-/* pthread:		thread/mutex
+/* pthread:		thread, mutex
 ** semaphore.h	sem
 ** fcntl.h		O_CREAT
 ** stdlib:		malloc
 ** stdio:		printf
 ** sys/time:	gettimeofday
-** unistd:		usleep
+** unistd:		usleep, write
 */
 
 
@@ -36,6 +36,8 @@ typedef struct			s_philo {
 	int					full;
 	sem_t				*leat;
 	char				*semname;
+	sem_t				*lshare;
+	char				*sharename;
 }						t_philo;
 
 typedef struct			s_data {
@@ -71,7 +73,7 @@ void					end_threads(t_data *d, pthread_t threads[]);
 
 void					*a_philo(void *vstruct);
 void					print_status(char *status, long time, int i_am, t_data *d);
-void					safe_lock(sem_t *lock, int die);
+void					safe_lock(sem_t *lock, int *die);
 void					grab_fork(t_data *d, t_philo *p);
 void					drop_fork(t_data *d);
 
@@ -83,4 +85,8 @@ void					*ft_calloc(size_t count, size_t size);
 void					ft_bzero(void *s, size_t n);
 int						print_return(char *str, int ret);
 char					*get_semname(int n);
+
+void					ft_putstr(char *s);
+void					ft_putlong(long i);
+void					ft_putint(int i);
 #endif

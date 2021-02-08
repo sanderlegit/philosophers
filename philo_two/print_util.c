@@ -23,8 +23,12 @@ void		print_forks(t_data *d, int n1, int n)
 {
 	int i;
 	if (PFORKD) {
-		sem_getvalue(d->fork, &i);
-		printf("fork: %d\t%d-->%d\n", n, i + n1, i);
+		(void)d;
+		(void)n1;
+		(void)n;
+		(void)i;
+		/*sem_getvalue(d->fork, &i);*/
+		/*printf("fork: %d\t%d-->%d\n", n, i + n1, i);*/
 	}
 }
 

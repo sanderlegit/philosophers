@@ -12,25 +12,18 @@
 
 #include "philo_two.h"
 
-int			init_data(t_data *d)
+int			init_data(t_data *d) //TODO This does not clear well during a crash at any point
 {
 	int		i;
 
 	d->alive = 0;
-	/*d->fork = ft_calloc(d->no_philo, sizeof(pthread_mutex_t));*/
-	/*if (!d->fork)*/
-		/*return (print_return("run_threads: failed to allocate fork", 1));*/
 	d->ph = ft_calloc(d->no_philo, sizeof(t_philo));
 	if (!d->ph)
-	{
-		free(d->fork);
 		return (print_return("run_threads: failed to allocate philo pointers", 1));
-	}
 	sem_unlink("lstatus");
 	d->lstatus = sem_open("lstatus", O_CREAT, 666, 1);
 	if (!d->lstatus)
 		return (print_return("init_data: sem initialization failed", 1));
-
 	sem_unlink("fork");
 	d->fork = sem_open("fork", O_CREAT, 666, d->no_philo);
 	if (!d->lstatus)
@@ -45,6 +38,18 @@ int			init_data(t_data *d)
 		d->ph[i].leat = sem_open(d->ph[i].semname, O_CREAT, 666, 1);
 		if (!d->ph[i].leat)
 			return (print_return("init_data: sem initialization failed", 1));
+		if (i % 2 == 0 && i + 1 != d->no_philo)
+		{
+			printf("%d and %d\n", i + 1, i+ 2);
+			d->ph[i].sharename = get_semname(i + d->no_philo);
+			if (!d->ph[i].sharename)
+				return (print_return("init_data: sem name initialization failed", 1));
+			sem_unlink(d->ph[i].sharename);
+			d->ph[i].lshare = sem_open(d->ph[i].semname, O_CREAT, 666, 1);
+			if (!d->ph[i].lshare)
+				return (print_return("init_data: sem initialization failed", 1));
+			d->ph[i + 1].lshare = d->ph[i].lshare;
+		}
 		i++;
 	}
 	return (0);
@@ -55,33 +60,34 @@ int			start_threads(t_data *d)
 	pthread_t	threads[d->no_philo];
 	int			i;
 
-	i = 0;
-	while (i < d->no_philo)
-	{
-		d->alive = i;
-		if (pthread_create(&threads[i], NULL, a_philo, d))
-			return (print_return("run_thread: failed to create thread", 1));
-		i++;
-		usleep(d->time_eat);
-	}
 	/*i = 0;*/
 	/*while (i < d->no_philo)*/
 	/*{*/
 		/*d->alive = i;*/
 		/*if (pthread_create(&threads[i], NULL, a_philo, d))*/
 			/*return (print_return("run_thread: failed to create thread", 1));*/
-		/*i += 2;*/
-		/*usleep(1000);*/
+		/*i++;*/
+		/*usleep(d->time_eat);*/
 	/*}*/
-	/*i = 1;*/
-	/*while (i < d->no_philo)*/
-	/*{*/
-		/*d->alive = i;*/
-		/*if (pthread_create(&threads[i], NULL, a_philo, d))*/
-			/*return (print_return("run_thread: failed to create thread", 1));*/
-		/*i += 2;*/
-		/*usleep(1000);*/
-	/*}*/
+
+	i = 0;
+	while (i < d->no_philo)
+	{
+		d->alive = i;
+		if (pthread_create(&threads[i], NULL, a_philo, d))
+			return (print_return("run_thread: failed to create thread", 1));
+		i += 2;
+		usleep(1000);
+	}
+	i = 1;
+	while (i < d->no_philo)
+	{
+		d->alive = i;
+		if (pthread_create(&threads[i], NULL, a_philo, d))
+			return (print_return("run_thread: failed to create thread", 1));
+		i += 2;
+		usleep(1000);
+	}
 	manage_threads(d);
 	end_threads(d, threads);
 	return (0);
@@ -95,7 +101,6 @@ void		manage_threads(t_data *d)
 		i = 0;
 		while (!d->has_died && i < d->no_philo)
 		{
-			/*pthread_mutex_lock(&d->ph[i].leat);*/
 			sem_wait(d->ph[i].leat);
 			if (d->must_eat != -1 && !d->ph[i].full && d->ph[i].eat_count >= d->must_eat)
 			{
@@ -104,30 +109,25 @@ void		manage_threads(t_data *d)
 				if (d->no_full == d->no_philo)
 					d->has_died = 1;
 				if (d->no_full == d->no_philo)
-					/*pthread_mutex_lock(&d->lstatus);*/
 					sem_wait(d->lstatus);
 			}
 			if ((elapsed(d) - d->ph[i].ate_at) > d->time_die) {
-				printf("tod:%ld, %d\n", elapsed(d) - d->ph[i].ate_at, d->time_die);
-				print_status("died", elapsed(d) / 1000, i + 1, d);
+				print_status(" died", elapsed(d) / 1000, i + 1, d);
 				d->has_died = 1;
-				/*pthread_mutex_lock(&d->lstatus);*/
 				sem_wait(d->lstatus);
 			}
-			/*pthread_mutex_unlock(&d->ph[i].leat);*/
 			sem_post(d->ph[i].leat);
+			usleep(7000 / d->no_philo);
 			i++;
 		}
 	}
 }
 
-void		end_threads(t_data *d, pthread_t threads[])
+void		end_threads(t_data *d, pthread_t threads[]) //TODO incomplete
 {
 	int		i;
 
-	/*pthread_mutex_unlock(&d->lstatus);*/
-	/*pthread_mutex_destroy(&d->lstatus);*/
-	sem_post(d->lstatus);
+	sem_post(d->lstatus);		//TODO Split into another function, and call on error during init
 	sem_unlink("lstatus");
 	i = 0;
 	while (i < d->no_philo)
@@ -135,10 +135,6 @@ void		end_threads(t_data *d, pthread_t threads[])
 		sem_post(d->ph[i].leat);
 		sem_unlink(d->ph[i].semname);
 		sem_post(d->fork);
-		/*pthread_mutex_unlock(&d->fork[i]);*/
-		/*pthread_mutex_unlock(&d->ph[i].leat);*/
-		/*pthread_mutex_destroy(&d->fork[i]);*/
-		/*pthread_mutex_destroy(&d->ph[i].leat);*/
 		i++;
 	}
 	sem_unlink("fork");

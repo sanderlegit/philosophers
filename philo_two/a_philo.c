@@ -26,7 +26,6 @@ void		safe_lock(sem_t *lock, int *die)
 void		print_status(char *status, long time, int i_am, t_data *d)
 {
 	safe_lock(d->lstatus, &d->has_died);
-	/*printf("%ld\t%d %s\n", time, i_am, status);*/
 	ft_putlong(time);
 	write(1, "\t", 1);
 	ft_putint(i_am);
@@ -43,19 +42,13 @@ void		drop_fork(t_data *d)
 
 void		grab_fork(t_data *d, t_philo *p)
 {
-	if (p->lshare) {
-		/*printf("->%d waiting\n", p->i_am);*/
-		/*ft_putint(p->i_am);*/
-		/*ft_putstr(" waiting\n");*/
+	/*if (p->lshare) {*/
 		/*sem_wait(p->lshare);*/
-		/*printf("->%d done waiting\n", p->i_am);*/
-	}
+	/*}*/
 	safe_lock(d->fork, &d->has_died);
-	/*print_forks(d, 1, p->i_am);//Debug*/
 	print_status(" has taken a fork", elapsed(d) / 1000, p->i_am, d);
 	safe_lock(d->fork, &d->has_died);
 	sem_wait(p->leat);
-	/*print_forks(d, 1, p->i_am);//Debug*/
 	p->eat_count++;
 	p->ate_at = elapsed(d);
 	print_status(" is eating", elapsed(d) / 1000, p->i_am, d);
@@ -76,19 +69,12 @@ void		*a_philo(void *vstruct)
 	while (1)
 	{
 		print_status(" is thinking", elapsed(d) / 1000, p->i_am, d);
-		/*eat_debug(d, p);//Debug*/
 		grab_fork(d, p);
-		/*eat_debug(d, p);//Debug*/
 		usleep(d->time_eat);
 		drop_fork(d);
-		if (p->lshare) {
-			/*ft_putint(p->i_am);*/
-			/*ft_putstr(" clearing\n");*/
-			/*printf("->%d clearing\n", p->i_am);*/
+		/*if (p->lshare) {*/
 			/*sem_post(p->lshare);*/
-			/*printf("->%d cleared\n", p->i_am);*/
-		}
-		/*print_forks(d, -2, -1 * p->i_am);//Debug*/
+		/*}*/
 		print_status(" is sleeping", elapsed(d) / 1000, p->i_am, d);
 		usleep(d->time_sleep);
 	}

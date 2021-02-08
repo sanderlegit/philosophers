@@ -21,11 +21,6 @@ CC		=	gcc
 #FLAGS	=	-O3
 #FLAGS	+=	-g
 #FLAGS	+=	-fsanitize=address
-CFILES	+=	print_util.c
-OFILES	=	$(CFILES:%.c=objects/%.o)
-
-#BOLD	=	\033[1m
-#CLEAR	=	\033[0m
 
 all: $(NAME)
 	echo $(OFILES)

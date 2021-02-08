@@ -35,8 +35,6 @@ typedef struct			s_philo {
 	int					full;
 	sem_t				*leat;
 	char				*semname;
-	//sem_t				*lshare;
-	//char				*sharename;
 }						t_philo;
 
 typedef struct			s_data {
@@ -53,9 +51,6 @@ typedef struct			s_data {
 	int					has_died;
 	t_philo				*ph;
 }						t_data;
-
-# define PARGD	1
-void		arg_debug(t_data *d);
 
 void					parse_arg(int *res, char *arg, int *fail);
 int						parse_args(t_data *d, int argc, char **argv);

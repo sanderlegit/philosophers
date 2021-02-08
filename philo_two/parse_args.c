@@ -58,6 +58,5 @@ int			parse_args(t_data *d, int argc, char **argv)
 	}
 	if ((argc != 5 && argc != 6) || fail || check_args(d))
 		return (print_return("parse_args: invalid arguments", 1));
-	arg_debug(d);//Debug
 	return (0);
 }

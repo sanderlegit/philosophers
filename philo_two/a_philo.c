@@ -42,9 +42,6 @@ void		drop_fork(t_data *d)
 
 void		grab_fork(t_data *d, t_philo *p)
 {
-	/*if (p->lshare) {*/
-		/*sem_wait(p->lshare);*/
-	/*}*/
 	safe_lock(d->fork, &d->has_died);
 	print_status(" has taken a fork", elapsed(d) / 1000, p->i_am, d);
 	safe_lock(d->fork, &d->has_died);
@@ -72,9 +69,6 @@ void		*a_philo(void *vstruct)
 		grab_fork(d, p);
 		usleep(d->time_eat);
 		drop_fork(d);
-		/*if (p->lshare) {*/
-			/*sem_post(p->lshare);*/
-		/*}*/
 		print_status(" is sleeping", elapsed(d) / 1000, p->i_am, d);
 		usleep(d->time_sleep);
 	}

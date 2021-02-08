@@ -18,7 +18,7 @@ FLAGS	=	-Werror -Wall -Wextra -O3
 LIB		=	-lpthread
 CC		=	gcc
 
-#FLAGS	=	-O3
+FLAGS	=	-O3
 #FLAGS	+=	-g
 #FLAGS	+=	-fsanitize=address
 CFILES	+=	print_util.c

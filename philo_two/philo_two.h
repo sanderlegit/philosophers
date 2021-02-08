@@ -57,6 +57,7 @@ typedef struct			s_data {
 void		eat_debug(t_data *d, t_philo *p);
 # define PARGD	1
 void		arg_debug(t_data *d);
+# define PFORKD	0
 void		print_forks(t_data *d, int n1, int n);
 
 void					parse_arg(int *res, char *arg, int *fail);

@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "philo_two.h"
-#include <semaphore.h>
 
 int			init_data(t_data *d)
 {

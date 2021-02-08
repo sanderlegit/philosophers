@@ -22,8 +22,10 @@ void		arg_debug(t_data *d)
 void		print_forks(t_data *d, int n1, int n)
 {
 	int i;
-	sem_getvalue(d->fork, &i);
-	printf("fork: %d\t%d-->%d\n", n, i + n1, i);
+	if (PFORKD) {
+		sem_getvalue(d->fork, &i);
+		printf("fork: %d\t%d-->%d\n", n, i + n1, i);
+	}
 }
 
 void		eat_debug(t_data *d, t_philo *p)

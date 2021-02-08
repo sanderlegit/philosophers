@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 NAME	=	philo_one
-CFILES	=	main.c a_philo.c parse_args.c time.c util_1.c
+CFILES	=	main.c a_philo.c parse_args.c time.c util_1.c util_2.c
 OBJDIR	=	objects
 OFILES	=	$(CFILES:%.c=$(OBJDIR)/%.o)
 FLAGS	=	-Werror -Wall -Wextra -O3

@@ -16,17 +16,22 @@
 ** eating -> sleeping -> thinking
 */
 
-void		safe_lock(pthread_mutex_t *lock, int die)
+void		safe_lock(pthread_mutex_t *lock, int *die)
 {
 	pthread_mutex_lock(lock);
-	if (die)
+	if (*die)
 		exit(0);
 }
 
 void		print_status(char *status, long time, int i_am, t_data *d)
 {
-	safe_lock(&d->lstatus, d->has_died);
-	printf("%ld\t%d %s\n", time, i_am, status);
+	safe_lock(&d->lstatus, &d->has_died);
+	/*printf("%ld\t%d %s\n", time, i_am, status);*/
+	ft_putlong(time);
+	write(1, "\t", 1);
+	ft_putint(i_am);
+	ft_putstr(status);
+	write(1, "\n", 1);
 	pthread_mutex_unlock(&d->lstatus);
 }
 
@@ -34,20 +39,21 @@ void		drop_fork(t_data *d, t_philo *p)
 {
 	pthread_mutex_unlock(p->fork[0]);
 	pthread_mutex_unlock(p->fork[1]);
-	fork_debug(d, p, 0);//Debug
+	(void)d;
+	/*fork_debug(d, p, 0);//Debug*/
 }
 
 void		grab_fork(t_data *d, t_philo *p)
 {
-	safe_lock(p->fork[0], d->has_died);
-	print_status("has taken a fork", elapsed(d) / 1000, p->i_am, d);
-	safe_lock(p->fork[1], d->has_died);
+	safe_lock(p->fork[0], &d->has_died);
+	print_status(" has taken a fork", elapsed(d) / 1000, p->i_am, d);
+	safe_lock(p->fork[1], &d->has_died);
 	pthread_mutex_lock(&p->leat);
 	p->eat_count++;
 	p->ate_at = elapsed(d);
-	print_status("is eating", elapsed(d) / 1000, p->i_am, d);
+	print_status(" is eating", elapsed(d) / 1000, p->i_am, d);
 	pthread_mutex_unlock(&p->leat);
-	fork_debug(d, p, p->i_am);//Debug
+	/*fork_debug(d, p, p->i_am);//Debug*/
 }
 
 void		*a_philo(void *vstruct)
@@ -65,13 +71,13 @@ void		*a_philo(void *vstruct)
 	p->fork[1] = &d->fork[p->i_am - 1];
 	while (1)
 	{
-		print_status("is thinking", elapsed(d) / 1000, p->i_am, d);
-		eat_debug(d, p);//Debug
+		print_status(" is thinking", elapsed(d) / 1000, p->i_am, d);
+		/*eat_debug(d, p);//Debug*/
 		grab_fork(d, p);
-		eat_debug(d, p);//Debug
+		/*eat_debug(d, p);//Debug*/
 		usleep(d->time_eat);
 		drop_fork(d, p);
-		print_status("is sleeping", elapsed(d) / 1000, p->i_am, d);
+		print_status(" is sleeping", elapsed(d) / 1000, p->i_am, d);
 		usleep(d->time_sleep);
 	}
 	return (0);

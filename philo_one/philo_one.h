@@ -17,11 +17,11 @@
 # include <stdio.h>
 # include <sys/time.h>
 # include <unistd.h>
-/* pthread:		thread/mutex
+/* pthread:		thread, mutex
 ** stdlib:		malloc
 ** stdio:		printf
 ** sys/time:	gettimeofday
-** unistd:		usleep
+** unistd:		usleep, write
 */
 
 
@@ -70,7 +70,7 @@ void					end_threads(t_data *d, pthread_t threads[]);
 
 void					*a_philo(void *vstruct);
 void					print_status(char *status, long time, int i_am, t_data *d);
-void					safe_lock(pthread_mutex_t *lock, int die);
+void					safe_lock(pthread_mutex_t *lock, int *die);
 void					grab_fork(t_data *d, t_philo *p);
 void					drop_fork(t_data *d, t_philo *p);
 
@@ -81,4 +81,8 @@ int						ft_atoi(const char *str);
 void					*ft_calloc(size_t count, size_t size);
 void					ft_bzero(void *s, size_t n);
 int						print_return(char *str, int ret);
+
+void					ft_putstr(char *s);
+void					ft_putlong(long i);
+void					ft_putint(int i);
 #endif

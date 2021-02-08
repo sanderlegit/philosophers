@@ -1,7 +1,0 @@
-check the bounds of the arguments properly
-	if (data->phil_count < 2 || data->phil_count > 200)
-		return (true);
-	if (data->time.die < 60 || data->time.eat < 60 || data->time.sleep < 60)
-		return (true);
-	if (data->min_eat && data->min_eat <= 0)
-		return (true);

@@ -30,7 +30,6 @@
 # define THINK	" is thinking"
 # define DIED	" has died"
 
-
 typedef struct			s_philo {
 	int					i_am;
 	long				ate_at;

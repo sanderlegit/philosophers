@@ -82,13 +82,13 @@ void	destruct_mutex(t_data *d)
 	i = 0;
 	while (i < d->no_philo)
 	{
-		if (d->mutex_check)
+		if (d->fork && d->mutex_check)
 		{
 			pthread_mutex_unlock(&d->fork[i]);
 			pthread_mutex_destroy(&d->fork[i]);
 			d->mutex_check--;
 		}
-		if (d->mutex_check)
+		if (d->ph && d->mutex_check)
 		{
 			pthread_mutex_unlock(&d->ph[i].leat);
 			pthread_mutex_destroy(&d->ph[i].leat);

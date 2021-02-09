@@ -16,7 +16,6 @@ int			init_data(t_data *d)
 {
 	int		i;
 
-	d->alive = 0;
 	d->fork = ft_calloc(d->no_philo, sizeof(pthread_mutex_t));
 	if (!d->fork)
 		return (print_return("run_threads: failed to allocate fork", 1));
@@ -74,12 +73,13 @@ void		manage_threads(t_data *d)
 {
 	int		i;
 
-	while (!d->has_died) {
+	while (!d->has_died)
+	{
 		i = 0;
 		while (!d->has_died && i < d->no_philo)
 		{
 			pthread_mutex_lock(&d->ph[i].leat);
-			if (d->must_eat != -1 && !d->ph[i].full && d->ph[i].eat_count >= d->must_eat)//too long
+			if (d->must_eat != -1 && !d->ph[i].full && d->ph[i].eat_count >= d->must_eat)
 			{
 				d->no_full++;
 				d->ph[i].full = 1;
@@ -117,9 +117,9 @@ void		end_threads(t_data *d, pthread_t threads[])
 ** argv[1] number_of_pihlo:	no of philo, and no of forks
 ** argv[2] time_to_die:		milliseconds, max time since start last
 ** 							meal/simulation before death
-** argv[2] time_to_eat:		milliseconds, duration to eat (2 forks)
-** argv[2] time_to_sleep:	milliseconds, time spend sleeping
-** argv[2] number_of_times_\
+** argv[3] time_to_eat:		milliseconds, duration to eat (2 forks)
+** argv[4] time_to_sleep:	milliseconds, time spend sleeping
+** argv[5] number_of_times_\
 ** each_philosopher_\
 ** must_eat:				(optional) stop after each philo eats x times
 **							(instead of stop on death)

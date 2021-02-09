@@ -56,15 +56,6 @@ typedef struct			s_data {
 	t_philo				*ph;
 }						t_data;
 
-# define PEATD	0
-void		eat_debug(t_data *d, t_philo *p);
-# define PFORKS	0
-void		create_fork_debug(t_data *d);
-void		print_forks(t_data *d, t_philo *p);
-void		fork_debug(t_data *d, t_philo *p, int n);
-# define PARGD	0
-void		arg_debug(t_data *d);
-
 void					parse_arg(int *res, char *arg, int *fail);
 int						parse_args(t_data *d, int argc, char **argv);
 int						check_args(t_data *d);
@@ -77,9 +68,7 @@ void					end_threads(t_data *d, pthread_t threads[]);
 void					*a_philo(void *vstruct);
 void					simulate(t_data *d, t_philo *p);
 void					print_status(char *status, int i_am, t_data *d);
-void					safe_lock(pthread_mutex_t *lock, int *die);
 void					grab_fork(t_data *d, t_philo *p);
-void					drop_fork(t_philo *p);
 
 int						init_time(t_data *d);
 long					elapsed(long start_time);

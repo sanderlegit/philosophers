@@ -12,11 +12,10 @@
 
 #include "philo_one.h"
 
-int			init_data(t_data *d)
+int			init_data(t_data *d) //TODO unsafe exit, need to call a struct deconstructor
 {
 	int		i;
 
-	create_fork_debug(d);//Debug
 	d->alive = 0;
 	d->fork = ft_calloc(d->no_philo, sizeof(pthread_mutex_t));
 	if (!d->fork)
@@ -25,7 +24,7 @@ int			init_data(t_data *d)
 	if (!d->ph)
 	{
 		free(d->fork);
-		return (print_return("run_threads: failed to allocate philo pointers", 1));
+		return (print_return("run_threads: failed to allocate t_philo", 1));
 	}
 	if (pthread_mutex_init(&d->lstatus, NULL) != 0)
 		return (print_return("init_data: mutex initialization failed", 1));
@@ -33,9 +32,9 @@ int			init_data(t_data *d)
 	while (i < d->no_philo)
 	{
 		if (pthread_mutex_init(&d->fork[i], NULL) != 0)
-			return (print_return("init_data: mutex initialization failed", 1));
+			return (print_return("init_data: mutex init failed", 1));
 		if (pthread_mutex_init(&d->ph[i].leat, NULL) != 0)
-			return (print_return("init_data: mutex initialization failed", 1));
+			return (print_return("init_data: mutex init failed", 1));
 		i++;
 	}
 	return (0);
@@ -78,7 +77,7 @@ void		manage_threads(t_data *d)
 		while (!d->has_died && i < d->no_philo)
 		{
 			pthread_mutex_lock(&d->ph[i].leat);
-			if (d->must_eat != -1 && !d->ph[i].full && d->ph[i].eat_count >= d->must_eat)
+			if (d->must_eat != -1 && !d->ph[i].full && d->ph[i].eat_count >= d->must_eat)//too long
 			{
 				d->no_full++;
 				d->ph[i].full = 1;
@@ -103,7 +102,7 @@ void		end_threads(t_data *d, pthread_t threads[])
 {
 	int		i;
 
-	pthread_mutex_unlock(&d->lstatus);
+	pthread_mutex_unlock(&d->lstatus);		//TODO split into a struct deconstructor
 	pthread_mutex_destroy(&d->lstatus);
 	i = 0;
 	while (i < d->no_philo)
@@ -113,7 +112,7 @@ void		end_threads(t_data *d, pthread_t threads[])
 		pthread_mutex_destroy(&d->fork[i]);
 		pthread_mutex_destroy(&d->ph[i].leat);
 		i++;
-	}
+	}										//TODO
 	i = 0;
 	while (i < d->no_philo)
 	{
@@ -147,7 +146,6 @@ int			main(int argc, char **argv)
 		return (1);
 	if (start_threads(&data))
 		return (1);
-	free(data.fork_status);//Debug
 	free(data.fork);
 	free(data.ph);
 	return (0);

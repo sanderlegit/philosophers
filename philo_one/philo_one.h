@@ -75,6 +75,7 @@ void					manage_threads(t_data *d);
 void					end_threads(t_data *d, pthread_t threads[]);
 
 void					*a_philo(void *vstruct);
+void					simulate(t_data *d, t_philo *p);
 void					print_status(char *status, int i_am, t_data *d);
 void					safe_lock(pthread_mutex_t *lock, int *die);
 void					grab_fork(t_data *d, t_philo *p);

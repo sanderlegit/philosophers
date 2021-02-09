@@ -28,7 +28,7 @@ void		eat_debug(t_data *d, t_philo *p)
 {
 	if (PEATD) {
 		pthread_mutex_lock(&d->lstatus);
-		printf("\t%d has eaten %d times, last %ld\n", p->i_am, p->eat_count, (elapsed(d) - p->ate_at) / 1000);
+		printf("\t%d has eaten %d times, last %ld\n", p->i_am, p->eat_count, (elapsed(d->start_time) - p->ate_at) / 1000);
 		pthread_mutex_unlock(&d->lstatus);
 	}
 }

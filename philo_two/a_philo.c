@@ -34,10 +34,10 @@ void		print_status(char *status, long time, int i_am, t_data *d)
 	sem_post(d->lstatus);
 }
 
-void		drop_fork(t_data *d)
+void		drop_fork(sem_t *fork)
 {
-	sem_post(d->fork);
-	sem_post(d->fork);
+	sem_post(fork);
+	sem_post(fork);
 }
 
 void		grab_fork(t_data *d, t_philo *p)
@@ -68,7 +68,7 @@ void		*a_philo(void *vstruct)
 		print_status(" is thinking", elapsed(d) / 1000, p->i_am, d);
 		grab_fork(d, p);
 		usleep(d->time_eat);
-		drop_fork(d);
+		drop_fork(d->fork);
 		print_status(" is sleeping", elapsed(d) / 1000, p->i_am, d);
 		usleep(d->time_sleep);
 	}

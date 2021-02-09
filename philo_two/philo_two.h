@@ -65,7 +65,7 @@ void					*a_philo(void *vstruct);
 void					print_status(char *status, long time, int i_am, t_data *d);
 void					safe_lock(sem_t *lock, int *die);
 void					grab_fork(t_data *d, t_philo *p);
-void					drop_fork(t_data *d);
+void					drop_fork(sem_t *fork);
 
 int						init_time(t_data *d);
 long					elapsed(t_data *d);

@@ -57,19 +57,8 @@ void		grab_fork(t_data *d, t_philo *p)
 	/*fork_debug(d, p, p->i_am);//Debug*/
 }
 
-void		*a_philo(void *vstruct)
+void		simulate(t_data *d, t_philo *p)
 {
-	t_data	*d;
-	t_philo	*p;
-	int		i;
-
-	d = vstruct;
-	i = d->alive;
-	p = &d->ph[i];
-	p->i_am = i + 1;
-	p->ate_at = elapsed(d->start_time);
-	p->fork[0] = p->i_am - 2 < 0 ? &d->fork[d->no_philo - 1] : &d->fork[p->i_am - 2];
-	p->fork[1] = &d->fork[p->i_am - 1];
 	while (1)
 	{
 		print_status(THINK, p->i_am, d);
@@ -98,6 +87,22 @@ void		*a_philo(void *vstruct)
 		print_status(SLEEP, p->i_am, d);
 		usleep(d->time_sleep);
 	}
+}
+
+void		*a_philo(void *vstruct)
+{
+	t_data	*d;
+	t_philo	*p;
+	int		i;
+
+	d = vstruct;
+	i = d->alive;
+	p = &d->ph[i];
+	p->i_am = i + 1;
+	p->ate_at = elapsed(d->start_time);
+	p->fork[0] = p->i_am - 2 < 0 ? &d->fork[d->no_philo - 1] : &d->fork[p->i_am - 2];
+	p->fork[1] = &d->fork[p->i_am - 1];
+	simulate(d, p);
 	return (0);
 }
 

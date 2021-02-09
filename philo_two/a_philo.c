@@ -16,17 +16,13 @@
 ** eating -> sleeping -> thinking
 */
 
-void		safe_lock(sem_t *lock, int *die)
+void		print_status(char *status, int i_am, t_data *d)
 {
-	sem_wait(lock);
-	if (*die)
+	/*safe_lock(d->lstatus, &d->has_died);*/
+	sem_wait(d->lstatus);
+	if (d->has_died)
 		exit(0);
-}
-
-void		print_status(char *status, long time, int i_am, t_data *d)
-{
-	safe_lock(d->lstatus, &d->has_died);
-	ft_putlong(time);
+	ft_putlong(elapsed(d->start_time) / 1000);
 	write(1, "\t", 1);
 	ft_putint(i_am);
 	ft_putstr(status);
@@ -34,22 +30,57 @@ void		print_status(char *status, long time, int i_am, t_data *d)
 	sem_post(d->lstatus);
 }
 
-void		drop_fork(sem_t *fork)
-{
-	sem_post(fork);
-	sem_post(fork);
-}
+/*void		drop_fork(sem_t *fork)*/
+/*{*/
+	/*sem_post(fork);*/
+	/*sem_post(fork);*/
+/*}*/
 
-void		grab_fork(t_data *d, t_philo *p)
+/*void		grab_fork(t_data *d, t_philo *p)*/
+/*{*/
+	/*[>safe_lock(d->fork, &d->has_died);<]*/
+	/*sem_wait(d->fork);*/
+	/*if (d->has_died)*/
+		/*exit(0);*/
+	/*print_status(FORK, p->i_am, d);*/
+	/*safe_lock(d->fork, &d->has_died);*/
+	/*sem_wait(d->fork);*/
+	/*if (d->has_died)*/
+		/*exit(0);*/
+	/*sem_wait(p->leat);*/
+	/*p->eat_count++;*/
+	/*p->ate_at = elapsed(d->start_time);*/
+	/*print_status(EAT, p->i_am, d);*/
+	/*sem_post(p->leat);*/
+/*}*/
+
+void		simulate(t_data *d, t_philo *p)
 {
-	safe_lock(d->fork, &d->has_died);
-	print_status(" has taken a fork", elapsed(d) / 1000, p->i_am, d);
-	safe_lock(d->fork, &d->has_died);
-	sem_wait(p->leat);
-	p->eat_count++;
-	p->ate_at = elapsed(d);
-	print_status(" is eating", elapsed(d) / 1000, p->i_am, d);
-	sem_post(p->leat);
+	while (1)
+	{
+		print_status(THINK, p->i_am, d);
+		/*grab_fork(d, p);*/
+		/*safe_lock(d->fork, &d->has_died);*/
+		sem_wait(d->fork);
+		if (d->has_died)
+			exit(0);
+		print_status(FORK, p->i_am, d);
+		/*safe_lock(d->fork, &d->has_died);*/
+		sem_wait(d->fork);
+		if (d->has_died)
+			exit(0);
+		sem_wait(p->leat);
+		p->eat_count++;
+		p->ate_at = elapsed(d->start_time);
+		print_status(EAT, p->i_am, d);
+		sem_post(p->leat);
+		usleep(d->time_eat);
+		/*drop_fork(d->fork);*/
+		sem_post(d->fork);
+		sem_post(d->fork);
+		print_status(SLEEP, p->i_am, d);
+		usleep(d->time_sleep);
+	}
 }
 
 void		*a_philo(void *vstruct)
@@ -62,16 +93,8 @@ void		*a_philo(void *vstruct)
 	i = d->alive;
 	p = &d->ph[i];
 	p->i_am = i + 1;
-	p->ate_at = elapsed(d);
-	while (1)
-	{
-		print_status(" is thinking", elapsed(d) / 1000, p->i_am, d);
-		grab_fork(d, p);
-		usleep(d->time_eat);
-		drop_fork(d->fork);
-		print_status(" is sleeping", elapsed(d) / 1000, p->i_am, d);
-		usleep(d->time_sleep);
-	}
+	p->ate_at = elapsed(d->start_time);
+	simulate(d, p);
 	return (0);
 }
 

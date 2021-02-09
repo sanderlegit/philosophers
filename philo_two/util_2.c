@@ -67,3 +67,40 @@ void	ft_putlong(long i)
 		pow = pow / 10;
 	}
 }
+
+void	destruct_sem(t_data *d)
+{
+	int		i;
+
+	if (d->lstatus)
+		sem_post(d->lstatus);
+	sem_unlink("lstatus");
+	i = 0;
+	while (i < d->no_philo)
+	{
+		if (d->ph && d->ph[i].leat)
+			sem_post(d->ph[i].leat);
+		sem_unlink(d->ph[i].semname);
+		if (d->fork)
+			sem_post(d->fork);
+		i++;
+	}
+	sem_unlink("fork");
+}
+
+void	destruct_data(t_data *d)
+{
+	int		i;
+
+	if (d->ph)
+	{
+		i = 0;
+		while (i < d->no_philo)
+		{
+			if (d->ph[i].semname)
+				free(d->ph[i].semname);
+			i++;
+		}
+		free(d->ph);
+	}
+}

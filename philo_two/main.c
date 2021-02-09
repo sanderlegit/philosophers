@@ -12,11 +12,10 @@
 
 #include "philo_two.h"
 
-int			init_data(t_data *d) //TODO This does not clear well during a crash at any point
+int			init_data(t_data *d)
 {
 	int		i;
 
-	d->alive = 0;
 	d->ph = ft_calloc(d->no_philo, sizeof(t_philo));
 	if (!d->ph)
 		return (print_return("run_threads: failed to allocate philo pointers", 1));
@@ -26,7 +25,7 @@ int			init_data(t_data *d) //TODO This does not clear well during a crash at any
 		return (print_return("init_data: sem initialization failed", 1));
 	sem_unlink("fork");
 	d->fork = sem_open("fork", O_CREAT, 666, d->no_philo);
-	if (!d->lstatus)
+	if (!d->fork)
 		return (print_return("init_data: sem initialization failed", 1));
 	i = 0;
 	while (i < d->no_philo)
@@ -48,6 +47,8 @@ int			start_threads(t_data *d)
 	pthread_t	threads[d->no_philo];
 	int			i;
 
+	if (init_time(d))
+		return (1);
 	i = 0;
 	while (i < d->no_philo)
 	{
@@ -75,7 +76,8 @@ void		manage_threads(t_data *d)
 {
 	int		i;
 
-	while (!d->has_died) {
+	while (!d->has_died)
+	{
 		i = 0;
 		while (!d->has_died && i < d->no_philo)
 		{
@@ -89,8 +91,8 @@ void		manage_threads(t_data *d)
 				if (d->no_full == d->no_philo)
 					sem_wait(d->lstatus);
 			}
-			if ((elapsed(d) - d->ph[i].ate_at) > d->time_die) {
-				print_status(" died", elapsed(d) / 1000, i + 1, d);
+			if ((elapsed(d->start_time) - d->ph[i].ate_at) > d->time_die) {
+				print_status(DIED, i + 1, d);
 				d->has_died = 1;
 				sem_wait(d->lstatus);
 			}
@@ -101,21 +103,11 @@ void		manage_threads(t_data *d)
 	}
 }
 
-void		end_threads(t_data *d, pthread_t threads[]) //TODO incomplete
+void		end_threads(t_data *d, pthread_t threads[])
 {
 	int		i;
 
-	sem_post(d->lstatus);		//TODO Split into another function, and call on error during init
-	sem_unlink("lstatus");
-	i = 0;
-	while (i < d->no_philo)
-	{
-		sem_post(d->ph[i].leat);
-		sem_unlink(d->ph[i].semname);
-		sem_post(d->fork);
-		i++;
-	}
-	sem_unlink("fork");
+	destruct_sem(d);
 	i = 0;
 	while (i < d->no_philo)
 	{
@@ -128,9 +120,9 @@ void		end_threads(t_data *d, pthread_t threads[]) //TODO incomplete
 ** argv[1] number_of_pihlo:	no of philo, and no of forks
 ** argv[2] time_to_die:		milliseconds, max time since start last
 ** 							meal/simulation before death
-** argv[2] time_to_eat:		milliseconds, duration to eat (2 forks)
-** argv[2] time_to_sleep:	milliseconds, time spend sleeping
-** argv[2] number_of_times_\
+** argv[3] time_to_eat:		milliseconds, duration to eat (2 forks)
+** argv[4] time_to_sleep:	milliseconds, time spend sleeping
+** argv[5] number_of_times_\
 ** each_philosopher_\
 ** must_eat:				(optional) stop after each philo eats x times
 **							(instead of stop on death)
@@ -139,23 +131,22 @@ void		end_threads(t_data *d, pthread_t threads[]) //TODO incomplete
 int			main(int argc, char **argv)
 {
 	t_data	data;
-	int		i;
 
 	ft_bzero(&data, sizeof(t_data));
 	if (parse_args(&data, argc, argv))
 		return (1);
 	if (init_data(&data))
-		return (1);
-	if (init_time(&data))
-		return (1);
-	if (start_threads(&data))
-		return (1);
-	i = 0;
-	while (i < data.no_philo)
 	{
-		free(data.ph[i].semname);
-		i++;
+		destruct_sem(&data);
+		destruct_data(&data);
+		return (1);
 	}
-	free(data.ph);
+	if (start_threads(&data))
+	{
+		destruct_sem(&data);
+		destruct_data(&data);
+		return (1);
+	}
+	destruct_data(&data);
 	return (0);
 }

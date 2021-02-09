@@ -19,7 +19,7 @@
 # include <fcntl.h>
 # include <sys/time.h>
 # include <unistd.h>
-/* pthread:		thread, mutex
+/* pthread:		thread 
 ** semaphore.h	sem
 ** fcntl.h		O_CREAT
 ** stdlib:		malloc
@@ -27,6 +27,12 @@
 ** sys/time:	gettimeofday
 ** unistd:		usleep, write
 */
+
+# define FORK	" has taken a fork"
+# define EAT	" is eating"
+# define SLEEP	" is sleeping"
+# define THINK	" is thinking"
+# define DIED	" has died"
 
 typedef struct			s_philo {
 	int					i_am;
@@ -62,13 +68,14 @@ void					manage_threads(t_data *d);
 void					end_threads(t_data *d, pthread_t threads[]);
 
 void					*a_philo(void *vstruct);
-void					print_status(char *status, long time, int i_am, t_data *d);
-void					safe_lock(sem_t *lock, int *die);
-void					grab_fork(t_data *d, t_philo *p);
-void					drop_fork(sem_t *fork);
+void					print_status(char *status, int i_am, t_data *d);
+void					simulate(t_data *d, t_philo *p);
+//void					safe_lock(sem_t *lock, int *die);
+//void					grab_fork(t_data *d, t_philo *p);
+//void					drop_fork(sem_t *fork);
 
 int						init_time(t_data *d);
-long					elapsed(t_data *d);
+long					elapsed(long start_time);
 
 int						ft_atoi(const char *str);
 void					*ft_calloc(size_t count, size_t size);
@@ -79,4 +86,6 @@ char					*get_semname(int n);
 void					ft_putstr(char *s);
 void					ft_putlong(long i);
 void					ft_putint(int i);
+void					destruct_sem(t_data *d);
+void					destruct_data(t_data *d);
 #endif

@@ -22,11 +22,11 @@ int			init_time(t_data *d)
 	return (0);
 }
 
-long		elapsed(t_data *d)
+long		elapsed(long start_time)
 {
 	struct timeval	tp;
 
 	if (gettimeofday(&tp, NULL) == -1)
-		return (print_return("elapsed: failed to get time", 0));
-	return (((tp.tv_sec * 1000000) + (tp.tv_usec)) - d->start_time);
+		return (print_return("elapsed: failed to get time", -1));
+	return (((tp.tv_sec * 1000000) + (tp.tv_usec)) - start_time);
 }

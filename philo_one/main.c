@@ -87,7 +87,7 @@ void		manage_threads(t_data *d)
 				if (d->no_full == d->no_philo)
 					pthread_mutex_lock(&d->lstatus);
 			}
-			if ((elapsed(d) - d->ph[i].ate_at) > d->time_die) {
+			if ((elapsed(d->start_time) - d->ph[i].ate_at) > d->time_die) {
 				print_status(DIED, i + 1, d);
 				d->has_died = 1;
 				pthread_mutex_lock(&d->lstatus);

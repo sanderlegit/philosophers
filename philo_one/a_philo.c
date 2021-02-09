@@ -30,7 +30,7 @@ void		print_status(char *status, int i_am, t_data *d)
 	if (d->has_died)
 		exit(0);
 	/*printf("%ld\t%d %s\n", time, i_am, status);*/
-	ft_putlong(elapsed(d) / 1000);
+	ft_putlong(elapsed(d->start_time) / 1000);
 	write(1, "\t", 1);
 	ft_putint(i_am);
 	ft_putstr(status);
@@ -51,7 +51,7 @@ void		grab_fork(t_data *d, t_philo *p)
 	safe_lock(p->fork[1], &d->has_died);
 	pthread_mutex_lock(&p->leat);
 	p->eat_count++;
-	p->ate_at = elapsed(d);
+	p->ate_at = elapsed(d->start_time);
 	print_status(EAT, p->i_am, d);
 	pthread_mutex_unlock(&p->leat);
 	/*fork_debug(d, p, p->i_am);//Debug*/
@@ -67,7 +67,7 @@ void		*a_philo(void *vstruct)
 	i = d->alive;
 	p = &d->ph[i];
 	p->i_am = i + 1;
-	p->ate_at = elapsed(d);
+	p->ate_at = elapsed(d->start_time);
 	p->fork[0] = p->i_am - 2 < 0 ? &d->fork[d->no_philo - 1] : &d->fork[p->i_am - 2];
 	p->fork[1] = &d->fork[p->i_am - 1];
 	while (1)
@@ -86,7 +86,7 @@ void		*a_philo(void *vstruct)
 					exit(0);
 			pthread_mutex_lock(&p->leat);
 			p->eat_count++;
-			p->ate_at = elapsed(d);
+			p->ate_at = elapsed(d->start_time);
 			print_status(EAT, p->i_am, d);
 			pthread_mutex_unlock(&p->leat);
 		/*eat_debug(d, p);//Debug*/

@@ -81,7 +81,7 @@ void					grab_fork(t_data *d, t_philo *p);
 void					drop_fork(t_philo *p);
 
 int						init_time(t_data *d);
-long					elapsed(t_data *d);
+long					elapsed(long start_time);
 
 int						ft_atoi(const char *str);
 void					*ft_calloc(size_t count, size_t size);

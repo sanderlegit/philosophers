@@ -27,6 +27,6 @@ long		elapsed(long start_time)
 	struct timeval	tp;
 
 	if (gettimeofday(&tp, NULL) == -1)
-		return (print_return("elapsed: failed to get time", 1));
+		return (print_return("elapsed: failed to get time", -1));
 	return (((tp.tv_sec * 1000000) + (tp.tv_usec)) - start_time);
 }

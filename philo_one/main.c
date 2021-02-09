@@ -12,7 +12,7 @@
 
 #include "philo_one.h"
 
-int			init_data(t_data *d) //TODO unsafe exit, need to call a struct deconstructor
+int			init_data(t_data *d)
 {
 	int		i;
 
@@ -22,19 +22,19 @@ int			init_data(t_data *d) //TODO unsafe exit, need to call a struct deconstruct
 		return (print_return("run_threads: failed to allocate fork", 1));
 	d->ph = ft_calloc(d->no_philo, sizeof(t_philo));
 	if (!d->ph)
-	{
-		free(d->fork);
 		return (print_return("run_threads: failed to allocate t_philo", 1));
-	}
 	if (pthread_mutex_init(&d->lstatus, NULL) != 0)
 		return (print_return("init_data: mutex initialization failed", 1));
+	d->mutex_check++;
 	i = 0;
 	while (i < d->no_philo)
 	{
 		if (pthread_mutex_init(&d->fork[i], NULL) != 0)
 			return (print_return("init_data: mutex init failed", 1));
+		d->mutex_check++;
 		if (pthread_mutex_init(&d->ph[i].leat, NULL) != 0)
 			return (print_return("init_data: mutex init failed", 1));
+		d->mutex_check++;
 		i++;
 	}
 	return (0);
@@ -45,6 +45,8 @@ int			start_threads(t_data *d)
 	pthread_t	threads[d->no_philo];
 	int			i;
 
+	if (init_time(d))
+		return (1);
 	i = 0;
 	while (i < d->no_philo)
 	{
@@ -102,17 +104,7 @@ void		end_threads(t_data *d, pthread_t threads[])
 {
 	int		i;
 
-	pthread_mutex_unlock(&d->lstatus);		//TODO split into a struct deconstructor
-	pthread_mutex_destroy(&d->lstatus);
-	i = 0;
-	while (i < d->no_philo)
-	{
-		pthread_mutex_unlock(&d->fork[i]);
-		pthread_mutex_unlock(&d->ph[i].leat);
-		pthread_mutex_destroy(&d->fork[i]);
-		pthread_mutex_destroy(&d->ph[i].leat);
-		i++;
-	}										//TODO
+	destruct_mutex(d);
 	i = 0;
 	while (i < d->no_philo)
 	{
@@ -141,12 +133,17 @@ int			main(int argc, char **argv)
 	if (parse_args(&data, argc, argv))
 		return (1);
 	if (init_data(&data))
+	{
+		destruct_mutex(&data);
+		destruct_data(&data);
 		return (1);
-	if (init_time(&data))
-		return (1);
+	}
 	if (start_threads(&data))
+	{
+		destruct_mutex(&data);
+		destruct_data(&data);
 		return (1);
-	free(data.fork);
-	free(data.ph);
+	}
+	destruct_data(&data);
 	return (0);
 }

@@ -29,18 +29,6 @@ void		print_status(char *status, int i_am, t_data *d)
 	pthread_mutex_unlock(&d->lstatus);
 }
 
-void		grab_fork(t_data *d, t_philo *p)
-{
-	safe_lock(p->fork[0], &d->has_died);
-	print_status(FORK, p->i_am, d);
-	safe_lock(p->fork[1], &d->has_died);
-	pthread_mutex_lock(&p->leat);
-	p->eat_count++;
-	p->ate_at = elapsed(d->start_time);
-	print_status(EAT, p->i_am, d);
-	pthread_mutex_unlock(&p->leat);
-}
-
 void		simulate(t_data *d, t_philo *p)
 {
 	while (1)

@@ -54,6 +54,7 @@ typedef struct			s_data {
 	long				start_time;
 	int					has_died;
 	t_philo				*ph;
+	int					mutex_check;
 }						t_data;
 
 void					parse_arg(int *res, char *arg, int *fail);
@@ -68,7 +69,6 @@ void					end_threads(t_data *d, pthread_t threads[]);
 void					*a_philo(void *vstruct);
 void					simulate(t_data *d, t_philo *p);
 void					print_status(char *status, int i_am, t_data *d);
-void					grab_fork(t_data *d, t_philo *p);
 
 int						init_time(t_data *d);
 long					elapsed(long start_time);
@@ -81,4 +81,6 @@ int						print_return(char *str, int ret);
 void					ft_putstr(char *s);
 void					ft_putlong(long i);
 void					ft_putint(int i);
+void					destruct_mutex(t_data *d);
+void					destruct_data(t_data *d);
 #endif

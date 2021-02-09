@@ -1,4 +1,5 @@
 *.o
 philo_one/philo_one
-
+*.sh
+*.txt
 philo_two/philo_two

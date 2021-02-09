@@ -24,6 +24,12 @@
 ** unistd:		usleep, write
 */
 
+# define FORK	" has taken a fork"
+# define EAT	" is eating"
+# define SLEEP	" is sleeping"
+# define THINK	" is thinking"
+# define DIED	" has died"
+
 
 typedef struct			s_philo {
 	int					i_am;
@@ -69,10 +75,10 @@ void					manage_threads(t_data *d);
 void					end_threads(t_data *d, pthread_t threads[]);
 
 void					*a_philo(void *vstruct);
-void					print_status(char *status, long time, int i_am, t_data *d);
+void					print_status(char *status, int i_am, t_data *d);
 void					safe_lock(pthread_mutex_t *lock, int *die);
 void					grab_fork(t_data *d, t_philo *p);
-void					drop_fork(t_data *d, t_philo *p);
+void					drop_fork(t_philo *p);
 
 int						init_time(t_data *d);
 long					elapsed(t_data *d);

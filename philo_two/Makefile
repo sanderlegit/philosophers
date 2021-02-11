@@ -6,12 +6,12 @@
 #    By: averheij <averheij@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2021/02/01 15:31:38 by averheij      #+#    #+#                  #
-#    Updated: 2021/02/11 12:38:14 by averheij      ########   odam.nl          #
+#    Updated: 2021/02/11 14:50:00 by averheij      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	philo_two
-CFILES	=	main.c a_philo.c parse_args.c time.c util_1.c util_2.c
+CFILES	=	main.c a_philo.c parse_args.c time.c util_1.c util_2.c threads.c
 OBJDIR	=	objects
 OFILES	=	$(CFILES:%.c=$(OBJDIR)/%.o)
 FLAGS	=	-Werror -Wall -Wextra -O3

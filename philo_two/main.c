@@ -6,16 +6,14 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:46:29 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/11 12:56:28 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/11 14:55:59 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
 
-int	init_data(t_data *d)
+int	init_data(t_data *d, int i)
 {
-	int		i;
-
 	d->ph = ft_calloc(d->no_philo, sizeof(t_philo));
 	if (!d->ph)
 		return (print_return("run_threads: failed to allocate t_philo", 1));
@@ -42,81 +40,6 @@ int	init_data(t_data *d)
 	return (0);
 }
 
-int	start_threads(t_data *d)
-{
-	pthread_t	threads[d->no_philo];
-	int			i;
-
-	if (init_time(d))
-		return (1);
-	i = 0;
-	while (i < d->no_philo)
-	{
-		d->alive = i;
-		if (pthread_create(&threads[i], NULL, a_philo, d))
-			return (print_return("run_thread: failed to create thread", 1));
-		i += 2;
-		usleep(1000);
-	}
-	i = 1;
-	while (i < d->no_philo)
-	{
-		d->alive = i;
-		if (pthread_create(&threads[i], NULL, a_philo, d))
-			return (print_return("run_thread: failed to create thread", 1));
-		i += 2;
-		usleep(1000);
-	}
-	manage_threads(d);
-	end_threads(d, threads);
-	return (0);
-}
-
-void	manage_threads(t_data *d)
-{
-	int		i;
-
-	while (!d->has_died)
-	{
-		i = 0;
-		while (!d->has_died && i < d->no_philo)
-		{
-			sem_wait(d->ph[i].leat);
-			if (d->m_eat != -1 && !d->ph[i].full && d->ph[i].eat_count >= d->m_eat)
-			{
-				d->no_full++;
-				d->ph[i].full = 1;
-				if (d->no_full == d->no_philo)
-					d->has_died = 1;
-				if (d->no_full == d->no_philo)
-					sem_wait(d->lstatus);
-			}
-			if ((elapsed(d->start_time) - d->ph[i].ate_at) > d->time_die)
-			{
-				print_status(DIED, i + 1, d);
-				d->has_died = 1;
-				sem_wait(d->lstatus);
-			}
-			sem_post(d->ph[i].leat);
-			usleep(7000 / d->no_philo);
-			i++;
-		}
-	}
-}
-
-void	end_threads(t_data *d, pthread_t *threads)
-{
-	int		i;
-
-	destruct_sem(d);
-	i = 0;
-	while (i < d->no_philo)
-	{
-		pthread_join(threads[i], NULL);
-		i++;
-	}
-}
-
 /*
 ** argv[1] number_of_pihlo:	no of philo, and no of forks
 ** argv[2] time_to_die:		milliseconds, max time since start last
@@ -132,17 +55,19 @@ void	end_threads(t_data *d, pthread_t *threads)
 int	main(int argc, char **argv)
 {
 	t_data	data;
+	int		i;
 
 	ft_bzero(&data, sizeof(t_data));
 	if (parse_args(&data, argc, argv))
 		return (1);
-	if (init_data(&data))
+	i = 0;
+	if (init_data(&data, i))
 	{
 		destruct_sem(&data);
 		destruct_data(&data);
 		return (1);
 	}
-	if (start_threads(&data))
+	if (run_simulation(&data))
 	{
 		destruct_sem(&data);
 		destruct_data(&data);

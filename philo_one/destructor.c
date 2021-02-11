@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   util_3.c                                           :+:    :+:            */
+/*   destructor.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/11 13:06:48 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/11 13:08:00 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/11 14:37:48 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,10 @@ void	destruct_data(t_data *d)
 	{
 		free(d->ph);
 		d->ph = NULL;
+	}
+	if (d->threads)
+	{
+		free(d->threads);
+		d->threads = NULL;
 	}
 }

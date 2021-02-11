@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:51:23 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/11 12:36:46 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/11 14:55:01 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,9 +111,17 @@ void	destruct_data(t_data *d)
 		while (i < d->no_philo)
 		{
 			if (d->ph[i].semname)
+			{
 				free(d->ph[i].semname);
+				d->ph[i].semname = NULL;
+			}
 			i++;
 		}
 		free(d->ph);
+	}
+	if (d->threads)
+	{
+		free(d->threads);
+		d->threads = NULL;
 	}
 }

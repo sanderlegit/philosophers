@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:51:41 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/11 13:19:33 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/11 14:42:50 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_data {
 	int					has_died;
 	t_philo				*ph;
 	int					mutex_check;
+	pthread_t			*threads;
 }						t_data;
 
 void					parse_arg(int *res, char *arg, int *fail);
@@ -61,7 +62,9 @@ int						parse_args(t_data *d, int argc, char **argv);
 int						check_args(t_data *d);
 
 int						init_data(t_data *d);
-int						start_threads(t_data *d);
+
+int						run_simulation(t_data *d);
+int						start_threads(t_data *d, pthread_t *threads);
 void					manage_threads(t_data *d);
 void					end_threads(t_data *d, pthread_t *threads);
 

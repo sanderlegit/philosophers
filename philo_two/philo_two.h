@@ -6,12 +6,12 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:51:41 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/05 16:48:28 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/11 12:08:21 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_ONE_H
-# define PHILO_ONE_H
+#ifndef PHILO_TWO_H
+# define PHILO_TWO_H
 # include <pthread.h>
 # include <semaphore.h>
 # include <stdlib.h>

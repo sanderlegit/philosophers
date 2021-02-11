@@ -6,13 +6,13 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 17:59:08 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/05 15:31:20 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/11 13:01:54 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
 
-int			init_time(t_data *d)
+int	init_time(t_data *d)
 {
 	struct timeval	tp;
 
@@ -22,7 +22,7 @@ int			init_time(t_data *d)
 	return (0);
 }
 
-long		elapsed(long start_time)
+long	elapsed(long start_time)
 {
 	struct timeval	tp;
 

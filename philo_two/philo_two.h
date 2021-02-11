@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:51:41 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/11 12:35:28 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/11 12:59:47 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 # define THINK	" is thinking"
 # define DIED	" has died"
 
-typedef struct			s_philo {
+typedef struct s_philo {
 	int					i_am;
 	long				ate_at;
 	int					eat_count;
@@ -43,12 +43,12 @@ typedef struct			s_philo {
 	char				*semname;
 }						t_philo;
 
-typedef struct			s_data {
+typedef struct s_data {
 	int					no_philo;
 	int					time_die;
 	int					time_eat;
 	int					time_sleep;
-	int					must_eat;
+	int					m_eat;
 	int					no_full;
 	sem_t				*fork;
 	sem_t				*lstatus;
@@ -65,14 +65,11 @@ int						check_args(t_data *d);
 int						init_data(t_data *d);
 int						start_threads(t_data *d);
 void					manage_threads(t_data *d);
-void					end_threads(t_data *d, pthread_t threads[]);
+void					end_threads(t_data *d, pthread_t *threads);
 
 void					*a_philo(void *vstruct);
 void					print_status(char *status, int i_am, t_data *d);
 void					simulate(t_data *d, t_philo *p);
-//void					safe_lock(sem_t *lock, int *die);
-//void					grab_fork(t_data *d, t_philo *p);
-//void					drop_fork(sem_t *fork);
 
 int						init_time(t_data *d);
 long					elapsed(long start_time);

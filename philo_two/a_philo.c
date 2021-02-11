@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 18:16:00 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/11 12:37:22 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/11 12:53:13 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@
 ** eating -> sleeping -> thinking
 */
 
-ssize_t		ft_putchar(char c)
+ssize_t	ft_putchar(char c)
 {
 	if (write(1, &c, 1) == -1)
 		return (-1);
 	return (0);
 }
 
-void		print_status(char *status, int i_am, t_data *d)
+void	print_status(char *status, int i_am, t_data *d)
 {
 	ssize_t		ret;
 
@@ -44,42 +44,15 @@ void		print_status(char *status, int i_am, t_data *d)
 	sem_post(d->lstatus);
 }
 
-/*void		drop_fork(sem_t *fork)*/
-/*{*/
-	/*sem_post(fork);*/
-	/*sem_post(fork);*/
-/*}*/
-
-/*void		grab_fork(t_data *d, t_philo *p)*/
-/*{*/
-	/*[>safe_lock(d->fork, &d->has_died);<]*/
-	/*sem_wait(d->fork);*/
-	/*if (d->has_died)*/
-		/*exit(0);*/
-	/*print_status(FORK, p->i_am, d);*/
-	/*safe_lock(d->fork, &d->has_died);*/
-	/*sem_wait(d->fork);*/
-	/*if (d->has_died)*/
-		/*exit(0);*/
-	/*sem_wait(p->leat);*/
-	/*p->eat_count++;*/
-	/*p->ate_at = elapsed(d->start_time);*/
-	/*print_status(EAT, p->i_am, d);*/
-	/*sem_post(p->leat);*/
-/*}*/
-
-void		simulate(t_data *d, t_philo *p)
+void	simulate(t_data *d, t_philo *p)
 {
 	while (1)
 	{
 		print_status(THINK, p->i_am, d);
-		/*grab_fork(d, p);*/
-		/*safe_lock(d->fork, &d->has_died);*/
 		sem_wait(d->fork);
 		if (d->has_died)
 			exit(0);
 		print_status(FORK, p->i_am, d);
-		/*safe_lock(d->fork, &d->has_died);*/
 		sem_wait(d->fork);
 		if (d->has_died)
 			exit(0);
@@ -89,7 +62,6 @@ void		simulate(t_data *d, t_philo *p)
 		print_status(EAT, p->i_am, d);
 		sem_post(p->leat);
 		usleep(d->time_eat);
-		/*drop_fork(d->fork);*/
 		sem_post(d->fork);
 		sem_post(d->fork);
 		print_status(SLEEP, p->i_am, d);
@@ -97,7 +69,7 @@ void		simulate(t_data *d, t_philo *p)
 	}
 }
 
-void		*a_philo(void *vstruct)
+void	*a_philo(void *vstruct)
 {
 	t_data	*d;
 	t_philo	*p;
@@ -111,4 +83,3 @@ void		*a_philo(void *vstruct)
 	simulate(d, p);
 	return (0);
 }
-

@@ -6,13 +6,13 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:51:23 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/05 16:26:03 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/11 12:58:36 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
 
-int			ft_atoi(const char *str)
+int	ft_atoi(const char *str)
 {
 	int					sign;
 	unsigned long int	res;
@@ -40,7 +40,7 @@ int			ft_atoi(const char *str)
 	return (sign * (int)res);
 }
 
-void		ft_bzero(void *s, size_t n)
+void	ft_bzero(void *s, size_t n)
 {
 	unsigned char	*us;
 	size_t			i;
@@ -54,7 +54,7 @@ void		ft_bzero(void *s, size_t n)
 	}
 }
 
-void		*ft_calloc(size_t count, size_t size)
+void	*ft_calloc(size_t count, size_t size)
 {
 	void		*block;
 
@@ -65,13 +65,13 @@ void		*ft_calloc(size_t count, size_t size)
 	return (block);
 }
 
-int			print_return(char *str, int ret)
+int	print_return(char *str, int ret)
 {
 	printf("philo_two: %s\n", str);
 	return (ret);
 }
 
-char		*get_semname(int n)
+char	*get_semname(int n)
 {
 	char	*str;
 	char	*tmp;

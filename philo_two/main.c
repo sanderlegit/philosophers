@@ -6,19 +6,19 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:46:29 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/05 16:53:21 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/11 12:56:28 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
 
-int			init_data(t_data *d)
+int	init_data(t_data *d)
 {
 	int		i;
 
 	d->ph = ft_calloc(d->no_philo, sizeof(t_philo));
 	if (!d->ph)
-		return (print_return("run_threads: failed to allocate philo pointers", 1));
+		return (print_return("run_threads: failed to allocate t_philo", 1));
 	sem_unlink("lstatus");
 	d->lstatus = sem_open("lstatus", O_CREAT, 666, 1);
 	if (!d->lstatus)
@@ -32,17 +32,17 @@ int			init_data(t_data *d)
 	{
 		d->ph[i].semname = get_semname(i);
 		if (!d->ph[i].semname)
-			return (print_return("init_data: sem name initialization failed", 1));
+			return (print_return("init_data: sem name init failed", 1));
 		sem_unlink(d->ph[i].semname);
 		d->ph[i].leat = sem_open(d->ph[i].semname, O_CREAT, 666, 1);
 		if (!d->ph[i].leat)
-			return (print_return("init_data: sem initialization failed", 1));
+			return (print_return("init_data: sem init failed", 1));
 		i++;
 	}
 	return (0);
 }
 
-int			start_threads(t_data *d)
+int	start_threads(t_data *d)
 {
 	pthread_t	threads[d->no_philo];
 	int			i;
@@ -72,7 +72,7 @@ int			start_threads(t_data *d)
 	return (0);
 }
 
-void		manage_threads(t_data *d)
+void	manage_threads(t_data *d)
 {
 	int		i;
 
@@ -82,7 +82,7 @@ void		manage_threads(t_data *d)
 		while (!d->has_died && i < d->no_philo)
 		{
 			sem_wait(d->ph[i].leat);
-			if (d->must_eat != -1 && !d->ph[i].full && d->ph[i].eat_count >= d->must_eat)
+			if (d->m_eat != -1 && !d->ph[i].full && d->ph[i].eat_count >= d->m_eat)
 			{
 				d->no_full++;
 				d->ph[i].full = 1;
@@ -91,7 +91,8 @@ void		manage_threads(t_data *d)
 				if (d->no_full == d->no_philo)
 					sem_wait(d->lstatus);
 			}
-			if ((elapsed(d->start_time) - d->ph[i].ate_at) > d->time_die) {
+			if ((elapsed(d->start_time) - d->ph[i].ate_at) > d->time_die)
+			{
 				print_status(DIED, i + 1, d);
 				d->has_died = 1;
 				sem_wait(d->lstatus);
@@ -103,7 +104,7 @@ void		manage_threads(t_data *d)
 	}
 }
 
-void		end_threads(t_data *d, pthread_t threads[])
+void	end_threads(t_data *d, pthread_t *threads)
 {
 	int		i;
 
@@ -124,11 +125,11 @@ void		end_threads(t_data *d, pthread_t threads[])
 ** argv[4] time_to_sleep:	milliseconds, time spend sleeping
 ** argv[5] number_of_times_\
 ** each_philosopher_\
-** must_eat:				(optional) stop after each philo eats x times
+** m_eat:				(optional) stop after each philo eats x times
 **							(instead of stop on death)
 */
 
-int			main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_data	data;
 

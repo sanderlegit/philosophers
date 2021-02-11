@@ -6,24 +6,24 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 17:16:45 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/05 14:21:41 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/11 13:01:27 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
 
-int			check_args(t_data *d)
+int	check_args(t_data *d)
 {
 	if (d->no_philo < 2 || d->no_philo > 200)
 		return (1);
 	if (d->time_die < 60000 || d->time_eat < 60000 || d->time_sleep < 60000)
 		return (1);
-	if (d->must_eat != -1 && d->must_eat <= 0)
+	if (d->m_eat != -1 && d->m_eat <= 0)
 		return (1);
 	return (0);
 }
 
-void		parse_arg(int *res, char *arg, int *fail)
+void	parse_arg(int *res, char *arg, int *fail)
 {
 	int		i;
 
@@ -37,7 +37,7 @@ void		parse_arg(int *res, char *arg, int *fail)
 	*res = ft_atoi(arg);
 }
 
-int			parse_args(t_data *d, int argc, char **argv)
+int	parse_args(t_data *d, int argc, char **argv)
 {
 	int		fail;
 
@@ -52,9 +52,9 @@ int			parse_args(t_data *d, int argc, char **argv)
 		parse_arg(&d->time_sleep, argv[4], &fail);
 		d->time_sleep *= 1000;
 		if (argc == 6)
-			parse_arg(&d->must_eat, argv[5], &fail);
+			parse_arg(&d->m_eat, argv[5], &fail);
 		else
-			d->must_eat = -1;
+			d->m_eat = -1;
 	}
 	if ((argc != 5 && argc != 6) || fail || check_args(d))
 		return (print_return("parse_args: invalid arguments", 1));

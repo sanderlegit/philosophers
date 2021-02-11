@@ -6,7 +6,7 @@
 #    By: averheij <averheij@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2021/02/01 15:31:38 by averheij      #+#    #+#                  #
-#    Updated: 2021/02/05 15:29:26 by averheij      ########   odam.nl          #
+#    Updated: 2021/02/11 12:38:14 by averheij      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,10 +17,6 @@ OFILES	=	$(CFILES:%.c=$(OBJDIR)/%.o)
 FLAGS	=	-Werror -Wall -Wextra -O3
 LIB		=	-lpthread
 CC		=	gcc
-
-#FLAGS	=	-O3
-#FLAGS	+=	-g
-#FLAGS	+=	-fsanitize=address
 
 all: $(NAME)
 	echo $(OFILES)

@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 18:16:00 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/11 12:37:30 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/11 13:09:45 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@
 ** eating -> sleeping -> thinking
 */
 
-ssize_t		ft_putchar(char c)
+ssize_t	ft_putchar(char c)
 {
 	if (write(1, &c, 1) == -1)
 		return (-1);
 	return (0);
 }
 
-void		print_status(char *status, int i_am, t_data *d)
+void	print_status(char *status, int i_am, t_data *d)
 {
 	ssize_t		ret;
 
@@ -44,7 +44,7 @@ void		print_status(char *status, int i_am, t_data *d)
 	pthread_mutex_unlock(&d->lstatus);
 }
 
-void		simulate(t_data *d, t_philo *p)
+void	simulate(t_data *d, t_philo *p)
 {
 	while (1)
 	{
@@ -69,7 +69,7 @@ void		simulate(t_data *d, t_philo *p)
 	}
 }
 
-void		*a_philo(void *vstruct)
+void	*a_philo(void *vstruct)
 {
 	t_data	*d;
 	t_philo	*p;
@@ -80,10 +80,11 @@ void		*a_philo(void *vstruct)
 	p = &d->ph[i];
 	p->i_am = i + 1;
 	p->ate_at = elapsed(d->start_time);
-	p->fork[0] = p->i_am - 2 < 0 ?
-			&d->fork[d->no_philo - 1] : &d->fork[p->i_am - 2];
+	if (p->i_am - 2 < 0)
+		p->fork[0] = &d->fork[d->no_philo - 1];
+	else
+		p->fork[0] = &d->fork[p->i_am - 2];
 	p->fork[1] = &d->fork[p->i_am - 1];
 	simulate(d, p);
 	return (0);
 }
-

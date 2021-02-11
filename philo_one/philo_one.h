@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:51:41 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/11 12:22:02 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/11 13:19:33 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,21 +30,21 @@
 # define THINK	" is thinking"
 # define DIED	" has died"
 
-typedef struct			s_philo {
+typedef struct s_philo {
 	int					i_am;
 	long				ate_at;
 	int					eat_count;
 	int					full;
-	pthread_mutex_t*	fork[2];
+	pthread_mutex_t		*fork[2];
 	pthread_mutex_t		leat;
 }						t_philo;
 
-typedef struct			s_data {
+typedef struct s_data {
 	int					no_philo;
 	int					time_die;
 	int					time_eat;
 	int					time_sleep;
-	int					must_eat;
+	int					m_eat;
 	int					no_full;
 	char				*fork_status;
 	pthread_mutex_t		*fork;
@@ -63,7 +63,7 @@ int						check_args(t_data *d);
 int						init_data(t_data *d);
 int						start_threads(t_data *d);
 void					manage_threads(t_data *d);
-void					end_threads(t_data *d, pthread_t threads[]);
+void					end_threads(t_data *d, pthread_t *threads);
 
 void					*a_philo(void *vstruct);
 void					simulate(t_data *d, t_philo *p);

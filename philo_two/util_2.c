@@ -6,29 +6,34 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:51:23 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/05 16:26:03 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/11 12:36:46 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
 
-void	ft_putstr(char *s)
+ssize_t	ft_putstr(char *s)
 {
 	int		i;
+	ssize_t	ret;
 
 	if (!s)
-		return ;
+		return (0);
 	i = 0;
 	while (s[i])
 		i++;
-	write(1, s, i);
+	ret = write(1, s, i);
+	if (ret == -1)
+		return (-1);
+	return (0);
 }
 
-void	ft_putint(int i)
+ssize_t	ft_putint(int i)
 {
 	int		temp;
 	int		pow;
 	char	val;
+	ssize_t	ret;
 
 	temp = i;
 	pow = 1;
@@ -40,17 +45,21 @@ void	ft_putint(int i)
 	while (pow)
 	{
 		val = '0' + i / pow;
-		write(1, &val, 1);
+		ret = write(1, &val, 1);
+		if (ret == -1)
+			return (ret);
 		i = i % pow;
 		pow = pow / 10;
 	}
+	return (0);
 }
 
-void	ft_putlong(long i)
+ssize_t	ft_putlong(long i)
 {
 	long	temp;
 	long	pow;
 	char	val;
+	ssize_t	ret;
 
 	temp = i;
 	pow = 1;
@@ -62,16 +71,20 @@ void	ft_putlong(long i)
 	while (pow)
 	{
 		val = '0' + i / pow;
-		write(1, &val, 1);
+		ret = write(1, &val, 1);
+		if (ret == -1)
+			return (ret);
 		i = i % pow;
 		pow = pow / 10;
 	}
+	return (0);
 }
 
 void	destruct_sem(t_data *d)
 {
 	int		i;
 
+	d->has_died = 1;
 	if (d->lstatus)
 		sem_post(d->lstatus);
 	sem_unlink("lstatus");

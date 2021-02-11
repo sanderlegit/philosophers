@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 18:16:00 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/05 16:58:52 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/11 12:37:22 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,31 @@
 ** eating -> sleeping -> thinking
 */
 
+ssize_t		ft_putchar(char c)
+{
+	if (write(1, &c, 1) == -1)
+		return (-1);
+	return (0);
+}
+
 void		print_status(char *status, int i_am, t_data *d)
 {
-	/*safe_lock(d->lstatus, &d->has_died);*/
+	ssize_t		ret;
+
 	sem_wait(d->lstatus);
 	if (d->has_died)
 		exit(0);
-	ft_putlong(elapsed(d->start_time) / 1000);
-	write(1, "\t", 1);
-	ft_putint(i_am);
-	ft_putstr(status);
-	write(1, "\n", 1);
+	ret = ft_putlong(elapsed(d->start_time) / 1000);
+	ret += ft_putchar('\t');
+	ret += ft_putint(i_am);
+	ret += ft_putstr(status);
+	ret += write(1, "\n", 1);
+	if (ret < 0)
+	{
+		destruct_sem(d);
+		destruct_data(d);
+		exit(1);
+	}
 	sem_post(d->lstatus);
 }
 

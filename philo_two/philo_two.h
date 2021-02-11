@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:51:41 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/11 12:08:21 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/11 12:35:28 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,9 @@ void					ft_bzero(void *s, size_t n);
 int						print_return(char *str, int ret);
 char					*get_semname(int n);
 
-void					ft_putstr(char *s);
-void					ft_putlong(long i);
-void					ft_putint(int i);
+ssize_t					ft_putstr(char *s);
+ssize_t					ft_putlong(long i);
+ssize_t					ft_putint(int i);
 void					destruct_sem(t_data *d);
 void					destruct_data(t_data *d);
 #endif

@@ -1,0 +1,5 @@
+pthread_create -> fork
+d->has_died -> kill
+pthread_join -> waitpid
+
+

@@ -80,9 +80,9 @@ int						check_args(t_data *d);
 int						init_data(t_data *d, int i);
 
 int						run_simulation(t_data *d);
-int						start_threads(t_data *d);
-void					manage_threads(t_data *d);
-void					end_threads(t_data *d);
+int						start_philo(t_data *d);
+void					manage_thread(t_data *d);
+void					end_processes(t_data *d);
 
 void					*a_philo(void *vstruct);
 void					print_status(char *status, int i_am, t_data *d);

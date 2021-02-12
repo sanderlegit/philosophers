@@ -1,29 +1,4 @@
-pthread_create -> fork
-d->has_died -> kill
-pthread_join -> waitpid
-
-psuesdo start-threads:
-
-fork
-if 0, i am child		done
-	pthread_create to do the philo
-	continue running onto manager
-if non zero, i am parent, return was child pid	done
-	store pid
-	wait on all pids
-
-manage-threads
-	Same loop, but dont iterate over all children, end the process when death occurs
-
-
-
 all processes must call the data_destructor
 	add kill processes to killer
-	set pids[i] to null on successful death/kill/wait
 
-only parents process must call sem_destructor
-
-rename start_threads -> start_processes
-
-
-make sure test with max eat, because I think sem_wait(lstatus) locks
+make sure test with max eat, because I think sem_wait(lstatus) locks philo_two

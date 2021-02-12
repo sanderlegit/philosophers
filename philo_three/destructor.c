@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/12 13:19:34 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/12 13:51:26 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/12 14:21:02 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	destruct_sem(t_data *d)
 {
 	int		i;
 
-	perror("destructing sem!");
 	d->has_died = 1;
 	if (d->lstatus)
 		sem_post(d->lstatus);
@@ -40,7 +39,6 @@ void	kill_processes(t_data *d)
 {
 	int		i;
 
-	perror("kill!");
 	i = 0;
 	while (i < d->no_philo)
 	{
@@ -57,7 +55,6 @@ void	destruct_data(t_data *d)
 {
 	int		i;
 
-	perror("destructing data!");
 	if (d->ls)
 	{
 		i = 0;

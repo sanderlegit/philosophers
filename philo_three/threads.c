@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/11 14:45:36 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/12 14:10:35 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/12 14:12:50 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void	end_threads(t_data *d)
 	i = 0;
 	while (i < d->no_philo)
 	{
-		/*perror("waiting on one");*/
+		perror("waiting on one");
 		/*pthread_join(threads[i], NULL);*/
 		waitpid(d->pids[i], &tmp, 0);
 		d->pids[i] = 0;

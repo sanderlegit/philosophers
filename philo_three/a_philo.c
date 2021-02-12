@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 18:16:00 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/12 14:11:01 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/12 14:15:39 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ void	print_status(char *status, int i_am, t_data *d)
 
 	sem_wait(d->lstatus);
 	if (d->has_died)
+	{
+		sem_post(d->lstatus);
 		exit(0);
+	}
 	ret = ft_putlong(elapsed(d->start_time) / 1000);
 	ret += ft_putchar('\t');
 	ret += ft_putint(i_am);
@@ -37,6 +40,7 @@ void	print_status(char *status, int i_am, t_data *d)
 	ret += write(1, "\n", 1);
 	if (ret < 0)
 	{
+		sem_post(d->lstatus);
 		destruct_data(d);
 		exit(1);
 	}

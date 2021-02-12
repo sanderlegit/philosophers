@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 18:16:00 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/11 12:53:13 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/12 13:30:08 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	print_status(char *status, int i_am, t_data *d)
 	ret += write(1, "\n", 1);
 	if (ret < 0)
 	{
-		destruct_sem(d);
+		destruct_sem(d);		//TODO this doesnt seem right
 		destruct_data(d);
 		exit(1);
 	}

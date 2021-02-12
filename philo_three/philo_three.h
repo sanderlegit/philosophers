@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:51:41 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/11 14:58:09 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/12 14:08:17 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # include <fcntl.h>
 # include <sys/time.h>
 # include <unistd.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <signal.h>
 /* pthread:		thread 
 ** semaphore.h	sem
 ** fcntl.h		O_CREAT
@@ -26,6 +29,9 @@
 ** stdio:		printf
 ** sys/time:	gettimeofday
 ** unistd:		usleep, write
+** sys/types	waitpid
+** sys/wait		waitpid
+** signal		SIG
 */
 
 # define FORK	" has taken a fork"
@@ -40,8 +46,13 @@ typedef struct s_philo {
 	int					eat_count;
 	int					full;
 	sem_t				*leat;
-	char				*semname;
+	int					has_fork;
 }						t_philo;
+
+typedef struct s_lock {
+	sem_t				*leat;
+	char				*semname;
+}						t_lock;
 
 typedef struct s_data {
 	int					no_philo;
@@ -55,8 +66,11 @@ typedef struct s_data {
 	int					alive;
 	long				start_time;
 	int					has_died;
-	t_philo				*ph;
+	t_lock				*ls;
+	t_philo				ph;
 	pthread_t			*threads;
+	int					*pids;
+	int					is_parent;
 }						t_data;
 
 void					parse_arg(int *res, char *arg, int *fail);
@@ -66,9 +80,9 @@ int						check_args(t_data *d);
 int						init_data(t_data *d, int i);
 
 int						run_simulation(t_data *d);
-int						start_threads(t_data *d, pthread_t *threads);
+int						start_threads(t_data *d);
 void					manage_threads(t_data *d);
-void					end_threads(t_data *d, pthread_t *threads);
+void					end_threads(t_data *d);
 
 void					*a_philo(void *vstruct);
 void					print_status(char *status, int i_am, t_data *d);
@@ -86,6 +100,8 @@ char					*get_semname(int n);
 ssize_t					ft_putstr(char *s);
 ssize_t					ft_putlong(long i);
 ssize_t					ft_putint(int i);
+
 void					destruct_sem(t_data *d);
 void					destruct_data(t_data *d);
+void					kill_processes(t_data *d);
 #endif

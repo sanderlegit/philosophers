@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:46:29 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/11 14:55:59 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/12 13:24:21 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	init_data(t_data *d, int i)
 {
-	d->ph = ft_calloc(d->no_philo, sizeof(t_philo));
-	if (!d->ph)
-		return (print_return("run_threads: failed to allocate t_philo", 1));
+	d->ls = ft_calloc(d->no_philo, sizeof(t_lock));
+	if (!d->ls)
+		return (print_return("run_threads: failed to allocate t_lock", 1));
 	sem_unlink("lstatus");
 	d->lstatus = sem_open("lstatus", O_CREAT, 666, 1);
 	if (!d->lstatus)
@@ -28,12 +28,12 @@ int	init_data(t_data *d, int i)
 	i = 0;
 	while (i < d->no_philo)
 	{
-		d->ph[i].semname = get_semname(i);
-		if (!d->ph[i].semname)
+		d->ls[i].semname = get_semname(i);
+		if (!d->ls[i].semname)
 			return (print_return("init_data: sem name init failed", 1));
-		sem_unlink(d->ph[i].semname);
-		d->ph[i].leat = sem_open(d->ph[i].semname, O_CREAT, 666, 1);
-		if (!d->ph[i].leat)
+		sem_unlink(d->ls[i].semname);
+		d->ls[i].leat = sem_open(d->ls[i].semname, O_CREAT, 666, 1);
+		if (!d->ls[i].leat)
 			return (print_return("init_data: sem init failed", 1));
 		i++;
 	}
@@ -69,7 +69,11 @@ int	main(int argc, char **argv)
 	}
 	if (run_simulation(&data))
 	{
-		destruct_sem(&data);
+		if (data.is_parent)
+		{
+			destruct_sem(&data);
+			kill_processes(&data);
+		}
 		destruct_data(&data);
 		return (1);
 	}

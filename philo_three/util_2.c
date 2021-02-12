@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:51:23 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/11 14:55:01 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/12 13:19:51 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,50 +78,4 @@ ssize_t	ft_putlong(long i)
 		pow = pow / 10;
 	}
 	return (0);
-}
-
-void	destruct_sem(t_data *d)
-{
-	int		i;
-
-	d->has_died = 1;
-	if (d->lstatus)
-		sem_post(d->lstatus);
-	sem_unlink("lstatus");
-	i = 0;
-	while (i < d->no_philo)
-	{
-		if (d->ph && d->ph[i].leat)
-			sem_post(d->ph[i].leat);
-		sem_unlink(d->ph[i].semname);
-		if (d->fork)
-			sem_post(d->fork);
-		i++;
-	}
-	sem_unlink("fork");
-}
-
-void	destruct_data(t_data *d)
-{
-	int		i;
-
-	if (d->ph)
-	{
-		i = 0;
-		while (i < d->no_philo)
-		{
-			if (d->ph[i].semname)
-			{
-				free(d->ph[i].semname);
-				d->ph[i].semname = NULL;
-			}
-			i++;
-		}
-		free(d->ph);
-	}
-	if (d->threads)
-	{
-		free(d->threads);
-		d->threads = NULL;
-	}
 }

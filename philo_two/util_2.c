@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 15:51:23 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/11 14:55:01 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/12 12:28:06 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,10 @@ void	destruct_sem(t_data *d)
 	while (i < d->no_philo)
 	{
 		if (d->ph && d->ph[i].leat)
+		{
 			sem_post(d->ph[i].leat);
-		sem_unlink(d->ph[i].semname);
+			sem_unlink(d->ph[i].semname);
+		}
 		if (d->fork)
 			sem_post(d->fork);
 		i++;

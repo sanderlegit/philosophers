@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 18:16:00 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/11 12:53:13 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/12 14:11:01 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void	print_status(char *status, int i_am, t_data *d)
 	ret += write(1, "\n", 1);
 	if (ret < 0)
 	{
-		destruct_sem(d);
 		destruct_data(d);
 		exit(1);
 	}
@@ -60,10 +59,10 @@ void	simulate(t_data *d, t_philo *p)
 		p->eat_count++;
 		p->ate_at = elapsed(d->start_time);
 		print_status(EAT, p->i_am, d);
-		sem_post(p->leat);
 		usleep(d->time_eat);
 		sem_post(d->fork);
 		sem_post(d->fork);
+		sem_post(p->leat);
 		print_status(SLEEP, p->i_am, d);
 		usleep(d->time_sleep);
 	}
@@ -77,7 +76,8 @@ void	*a_philo(void *vstruct)
 
 	d = vstruct;
 	i = d->alive;
-	p = &d->ph[i];
+	p = &d->ph;
+	p->leat = d->ls[i].leat;
 	p->i_am = i + 1;
 	p->ate_at = elapsed(d->start_time);
 	simulate(d, p);

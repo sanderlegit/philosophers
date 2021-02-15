@@ -6,7 +6,7 @@
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/02/01 18:16:00 by averheij      #+#    #+#                 */
-/*   Updated: 2021/02/11 13:09:45 by averheij      ########   odam.nl         */
+/*   Updated: 2021/02/15 15:34:42 by averheij      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ void	print_status(char *status, int i_am, t_data *d)
 	ret += write(1, "\n", 1);
 	if (ret < 0)
 	{
-		destruct_mutex(d);
+		d->has_died = 1;
+		pthread_mutex_unlock(&d->lstatus);
 		destruct_data(d);
 		exit(1);
 	}

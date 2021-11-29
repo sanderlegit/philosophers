@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo.h"
 
 int	run_simulation(t_data *d)
 {
@@ -67,7 +67,7 @@ void	manage_threads(t_data *d)
 		while (!d->has_died && i < d->no_philo)
 		{
 			pthread_mutex_lock(&d->ph[i].leat);
-			if (d->m_eat != -1 && !d->ph[i].full && d->ph[i].eat_count >= d->m_eat)
+			if (d->m_eat != -1 && !d->ph[i].full && d->ph[i].eat_c >= d->m_eat)
 			{
 				d->no_full++;
 				d->ph[i].full = 1;

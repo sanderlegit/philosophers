@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo.h"
 
 /*
 ** eating -> sleeping -> thinking
@@ -58,7 +58,7 @@ void	simulate(t_data *d, t_philo *p)
 		if (d->has_died)
 			exit(0);
 		pthread_mutex_lock(&p->leat);
-		p->eat_count++;
+		p->eat_c++;
 		p->ate_at = elapsed(d->start_time);
 		print_status(EAT, p->i_am, d);
 		pthread_mutex_unlock(&p->leat);

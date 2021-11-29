@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   philo_one.h                                        :+:    :+:            */
+/*   philo.h                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_ONE_H
-# define PHILO_ONE_H
+#ifndef PHILO_H
+# define PHILO_H
 # include <pthread.h>
 # include <stdlib.h>
 # include <stdio.h>
@@ -33,7 +33,7 @@
 typedef struct s_philo {
 	int					i_am;
 	long				ate_at;
-	int					eat_count;
+	int					eat_c;
 	int					full;
 	pthread_mutex_t		*fork[2];
 	pthread_mutex_t		leat;

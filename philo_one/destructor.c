@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo.h"
 
 void	pthread_unlock_destroy(pthread_mutex_t *mutex)
 {

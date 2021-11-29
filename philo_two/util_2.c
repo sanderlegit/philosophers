@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_two.h"
+#include "philo_bonus.h"
 
 ssize_t	ft_putstr(char *s)
 {

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_two.h"
+#include "philo_bonus.h"
 
 int	ft_atoi(const char *str)
 {
@@ -67,7 +67,7 @@ void	*ft_calloc(size_t count, size_t size)
 
 int	print_return(char *str, int ret)
 {
-	printf("philo_two: %s\n", str);
+	printf("philo_bonus: %s\n", str);
 	return (ret);
 }
 

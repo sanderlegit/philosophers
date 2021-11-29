@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_two.h"
+#include "philo_bonus.h"
 
 int	init_data(t_data *d, int i)
 {

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_two.h"
+#include "philo_bonus.h"
 
 /*
 ** eating -> sleeping -> thinking
@@ -58,7 +58,7 @@ void	simulate(t_data *d, t_philo *p)
 		if (d->has_died)
 			exit(0);
 		sem_wait(p->leat);
-		p->eat_count++;
+		p->eat_c++;
 		p->ate_at = elapsed(d->start_time);
 		print_status(EAT, p->i_am, d);
 		sem_post(p->leat);

@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME	=	philo_two
+NAME	=	philo_bonus
 CFILES	=	main.c a_philo.c parse_args.c time.c util_1.c util_2.c threads.c
 OBJDIR	=	objects
 OFILES	=	$(CFILES:%.c=$(OBJDIR)/%.o)

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_two.h"
+#include "philo_bonus.h"
 
 int	run_simulation(t_data *d)
 {
@@ -67,7 +67,7 @@ void	manage_threads(t_data *d)
 		while (!d->has_died && i < d->no_philo)
 		{
 			sem_wait(d->ph[i].leat);
-			if (d->m_eat != -1 && !d->ph[i].full && d->ph[i].eat_count >= d->m_eat)
+			if (d->m_eat != -1 && !d->ph[i].full && d->ph[i].eat_c >= d->m_eat)
 			{
 				d->no_full++;
 				d->ph[i].full = 1;

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   philo_two.h                                        :+:    :+:            */
+/*   philo_bonus.h                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: averheij <averheij@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_TWO_H
-# define PHILO_TWO_H
+#ifndef PHILO_BONUS_H
+# define PHILO_BONUS_H
 # include <pthread.h>
 # include <semaphore.h>
 # include <stdlib.h>
@@ -37,7 +37,7 @@
 typedef struct s_philo {
 	int					i_am;
 	long				ate_at;
-	int					eat_count;
+	int					eat_c;
 	int					full;
 	sem_t				*leat;
 	char				*semname;

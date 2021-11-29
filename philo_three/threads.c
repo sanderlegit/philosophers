@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_three.h"
+#include "philo_bonus.h"
 
 int	run_simulation(t_data *d)
 {

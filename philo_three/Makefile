@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME	=	philo_three
+NAME	=	philo_bonus
 CFILES	=	main.c a_philo.c parse_args.c time.c util_1.c util_2.c threads.c \
 			destructor.c
 OBJDIR	=	objects
